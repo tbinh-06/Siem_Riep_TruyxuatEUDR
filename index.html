@@ -687,7 +687,7 @@ const FLOWS = [
    ============================================================ */
 function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
 // Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
-const STORE_VER='v29';
+const STORE_VER='v30';
 try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
 
 let MODE = ss('cs_mode')||'chung';          // 'chung' = gộp chung · 'tach' = tách 2 luồng
@@ -870,8 +870,24 @@ function renderTabs(){
   renderMode();
 }
 
+// bước này có gì khác nhau giữa các phương án không?
+function stepHasMode(fi,si){
+  const st=(FLOWS[fi]||{}).steps&&FLOWS[fi].steps[si]; if(!st) return false;
+  return st.body.some(function(b){
+    if(b.m) return true;
+    if(b.fields && b.fields.some(function(f){return !!f.m;})) return true;
+    if(b.metrics && b.metrics.some(function(x){return !!x.m;})) return true;
+    if(b.table && b.table.cols.some(function(c){return !!c.m;})) return true;
+    return false;
+  });
+}
+
 function renderMode(){
-  document.getElementById('mode-bar').innerHTML =
+  const bar=document.getElementById('mode-bar');
+  const show = cf===-3 || (cf>=0 && stepHasMode(cf,cs[cf]));
+  if(!show){ bar.style.display='none'; bar.innerHTML=''; return; }
+  bar.style.display='';
+  bar.innerHTML =
     '<span class="mb-lbl">Khâu chế biến — chọn phương án:</span>'
    +'<button class="mb-btn'+(MODE==='chung'?' on':'')+'" onclick="setMode(\'chung\')">1️⃣ PA1 · Ra nhập 1 số tổng</button>'
    +'<button class="mb-btn'+(MODE==='tach'?' on':'')+'" onclick="setMode(\'tach\')">🔢 PA2 · Ra nhập riêng KT / TM</button>'
@@ -930,9 +946,9 @@ function renderCard(){
 
 function renderAll(){ renderHeader(); renderTabs(); renderNav(); renderCard(); }
 function goFlow(i){ saveForm(); cf=i; save(); renderAll(); scrollTo(0,0); }
-function goStep(i){ saveForm(); cs[cf]=i; save(); renderNav(); renderCard(); scrollTo(0,0); }
-function nextStep(){ saveForm(); if(cs[cf]<FLOWS[cf].steps.length-1){cs[cf]++;save();renderNav();renderCard();scrollTo(0,0);} }
-function prevStep(){ saveForm(); if(cs[cf]>0){cs[cf]--;save();renderNav();renderCard();scrollTo(0,0);} }
+function goStep(i){ saveForm(); cs[cf]=i; save(); renderNav(); renderCard(); renderMode(); scrollTo(0,0); }
+function nextStep(){ saveForm(); if(cs[cf]<FLOWS[cf].steps.length-1){cs[cf]++;save();renderNav();renderCard();renderMode();scrollTo(0,0);} }
+function prevStep(){ saveForm(); if(cs[cf]>0){cs[cf]--;save();renderNav();renderCard();renderMode();scrollTo(0,0);} }
 function nextFlow(){ saveForm(); if(cf<FLOWS.length-1){ cf++; save(); renderAll(); scrollTo(0,0);} else { goOverview(); } }
 function markDone(){ saveForm(); if(!state[key()]) state[key()]={}; state[key()].done=true; save(); renderNav(); }
 
