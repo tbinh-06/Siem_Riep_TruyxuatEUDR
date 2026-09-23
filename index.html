@@ -325,7 +325,7 @@ const FLOWS = [
         {id:'b2_nguon',label:'Nguồn của Mã B',type:'ro',inh:['1_0','b1_nguon'],inhLbl:'B-1',dflt:NGUON[0]},
         {id:'b2_loai_mu',label:'Loại mủ',type:'sel',opts:LOAI_MU,inh:['1_0','b1_loai_mu'],inhLbl:'B-1',dflt:'Mủ tạp'},
         {id:'b2_ngay',label:'Ngày phân lô',type:'ro',inh:['1_0','b1_ngay_lo'],inhLbl:'B-1',dflt:'2025-05-12'},
-        {id:'b2_nguoi',label:'Người tạo B',type:'text',dflt:'Nguyễn Văn A — NV kho nguyên liệu',hint:'Theo tài khoản đăng nhập'},
+        {id:'b2_nguoi',label:'Người tạo B',type:'text',dflt:'Nguyễn Văn A — NV kho nguyên liệu',hint:'Theo tài khoản đăng nhập'}
       ]},
       {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Bấm × để bỏ Mã A không muốn gom. Thêm lại thì chọn Mã A trong danh sách, các cột khác tự đổ theo.'},
       {title:'Danh sách Mã Giao Nhận (Mã A) hệ thống trả về', table:{id:'b2_list', add:'+ Thêm Mã A — chọn từ danh sách',
@@ -337,8 +337,6 @@ const FLOWS = [
         def:[POOL.maA[0],POOL.maA[1],POOL.maA[2]],
         foot:[{k:'ma_a',lbl:'Σ TỔNG CỘNG'},{k:'to',id:'b2_m_so',pre:'Số Mã A:',c:'amber'},
               {k:'nguon',id:'b2_m_cocau',c:'green'},{k:'kho',id:'b2_m_kho',c:'teal'}]}},
-      {m:'chung',co:'auto',t:'PA A — tỉ lệ dùng để tính',x:'Cơ cấu KT/TM ở đây là căn cứ suy ra thành phẩm sau chế biến.'},
-      {m:'tach',co:'auto',t:'PA B — tỉ lệ chỉ để đối chiếu',x:'Thành phẩm lấy theo số xưởng ghi chép, tỉ lệ dùng để so cho hợp lý.'}
     ]},
   { code:'B-3', title:'Duyệt tạo Mã B', desc:'Chốt lô lưu trữ — sẵn sàng đưa vào chế biến',
     nguoi:'Phụ trách kho', sla:'1 ngày', duyet:'Trưởng phòng kế hoạch',
@@ -368,13 +366,13 @@ const FLOWS = [
         {id:'c1_kcs',label:'Người kiểm tra KCS (nếu có)',type:'text',dflt:'Phạm D — KCS'}
       ]},
       {title:'Tiêu chí lọc Mã B', fields:[
+        {m:'don',id:'c1_nguon',label:'Nguồn chế biến của mẻ',type:'sel',opts:NGUON,req:1,full:1,dflt:NGUON[0],hint:'PA3: cả mẻ chỉ một nguồn — hệ thống chỉ trả Mã B cùng nguồn'},
         {id:'c1_tu',label:'Ngày phân lô Mã B — từ',type:'date',dflt:'2025-05-10'},
         {id:'c1_den',label:'Ngày phân lô Mã B — đến',type:'date',dflt:'2025-05-14'},
-        {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Chọn nhiều ô — một mẻ chế biến gom được Mã B từ nhiều ô'},
-        {m:'tach',id:'c1_nguon',label:'Nguồn cần chế biến',type:'sel',opts:NGUON,req:1,hint:'PA1: mỗi lệnh chế biến chỉ gom Mã B cùng một nguồn'}
+        {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Chọn nhiều ô — một mẻ chế biến gom được Mã B từ nhiều ô'}
       ]},
-      {m:'tach',co:'warn',t:'PA1 — một lệnh, một nguồn',x:'Chỉ gom Mã B cùng nguồn. Ngày nào chế biến cả hai nguồn thì lập 2 lệnh (2 Mã C).'},
-      {m:'chung',co:'warn',t:'PA2 — một lệnh, gộp mẻ',x:'Từ khâu chế biến được gom Mã B <b>cả hai nguồn</b> trong một mẻ; thành phẩm KT/TM suy theo tỉ lệ đầu vào ở bước C-4.'},
+      {m:['chung','tach'],co:'info',t:'Mẻ trộn 2 nguồn',x:'Gom được Mã B khai thác lẫn thu mua. Nguyên liệu vào luôn ghi riêng từng nguồn theo Mã B.'},
+      {m:'don',co:'info',t:'Mẻ 1 nguồn',x:'Chỉ gom Mã B cùng nguồn đã chọn. Không phải chia tỉ lệ, không phải nhập 2 số.'},
       {co:'auto',t:'Sau khi gửi xử lý',x:'Hệ thống sinh <b>Mã C = CB[YYMMDD]</b> và trả danh sách Mã B chưa chế biến khớp tiêu chí sang bước C-2.'}
     ]},
   { code:'C-2', title:'Chọn Mã B đưa vào chế biến', desc:'Hệ thống trả danh sách — người dùng thêm bớt và điền KL',
@@ -387,6 +385,7 @@ const FLOWS = [
         {id:'c2_ngay',label:'Ngày chế biến',type:'ro',inh:['2_0','c1_ngay'],inhLbl:'C-1'}
       ]},
       {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Danh sách Mã B chưa chế biến khớp tiêu chí ở C-1. Bấm × để bỏ, hoặc chọn thêm Mã B từ danh sách.'},
+      {m:'don',co:'info',t:'PA3 — chỉ một nguồn',x:'Danh sách chỉ gồm Mã B của nguồn đã chọn ở C-1.'},
       {title:'Danh sách Mã B hệ thống trả về', table:{id:'c1_ma_b', add:'+ Thêm Mã B — chọn từ danh sách',
         cols:[{k:'ma_b',l:'Mã Lô Lưu trữ (Mã B)',w:'165px',pick:'maB'},{k:'khu',l:'Ô lưu trữ',type:'sel',opts:KHU_LUU,w:'220px',ro:1},
               {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'110px',ro:1},
@@ -430,11 +429,22 @@ const FLOWS = [
       {title:'Kết quả chế biến', fields:[
         {id:'c4_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro',ph:'CB250501',inh:['2_1','c2_ma_c'],inhLbl:'C-2'},
         {id:'c3_sp_tt',label:'Sản phẩm thực tế',type:'sel',opts:LOAI_TP,inh:['2_0','c1_loai_tp'],inhLbl:'C-1 · sản phẩm mục tiêu',hint:'Sửa lại nếu phân loại lại sau kiểm tra chất lượng'},
-        {m:'chung',id:'c3_vao',label:'KL nguyên liệu đầu vào (kg quy khô)',type:'ro',dflt:'41500',hint:'Tự lấy từ bước C-2'},
-        {m:'chung',id:'c3_tp',label:'Tổng KL thành phẩm (kg)',type:'num',calc:1,req:1,hint:'Chỉ nhập một con số tổng',dflt:'46800'},
-        {m:'chung',id:'c3_tp_kt',label:'KL thành phẩm — khai thác (kg)',type:'ro',hint:'Hệ thống suy theo tỉ lệ Mã A đầu vào'},
-        {m:'chung',id:'c3_tp_tm',label:'KL thành phẩm — thu mua (kg)',type:'ro',hint:'Hệ thống suy theo tỉ lệ Mã A đầu vào'},
-        {m:'chung',id:'c3_sai_lech',label:'Sai lệch so với nguyên liệu (kg)',type:'ro',full:1}
+        {m:'don',id:'c3_nguon',label:'Nguồn của mẻ',type:'ro',inh:['2_0','c1_nguon'],inhLbl:'C-1',dflt:NGUON[0]},
+        {m:'don',id:'c3_vao',label:'KL nguyên liệu đầu vào (kg quy khô)',type:'ro',dflt:'31500',hint:'Tự lấy từ bước C-2'},
+        {m:'don',id:'c3_tp',label:'KL thành phẩm (kg)',type:'num',calc:1,req:1,dflt:'35400',hint:'Một con số — cả mẻ một nguồn'},
+        {m:'don',id:'c3_sai_lech',label:'Sai lệch so với nguyên liệu (kg)',type:'ro',full:1}
+      ]},
+      {m:'chung',title:'Nguyên liệu đầu vào — ghi riêng theo nguồn (từ C-2)', fields:[
+        {id:'c3_vao_kt',label:'KL vào — khai thác (kg)',type:'ro',dflt:'31500'},
+        {id:'c3_vao_tm',label:'KL vào — thu mua (kg)',type:'ro',dflt:'10000'},
+        {id:'c3_vao',label:'Tổng KL nguyên liệu vào (kg)',type:'ro',dflt:'41500'},
+        {id:'c3_ty_le',label:'Tỉ lệ cơ cấu đầu vào',type:'ro',hint:'Dùng để chia thành phẩm'}
+      ]},
+      {m:'chung',title:'Thành phẩm ra — nhập 1 số tổng', fields:[
+        {id:'c3_tp',label:'Tổng KL thành phẩm (kg)',type:'num',calc:1,req:1,hint:'Chỉ nhập một con số tổng',dflt:'46800'},
+        {id:'c3_sai_lech',label:'Sai lệch so với nguyên liệu (kg)',type:'ro'},
+        {id:'c3_tp_kt',label:'KL thành phẩm — khai thác (kg)',type:'ro',hint:'Máy chia theo tỉ lệ đầu vào'},
+        {id:'c3_tp_tm',label:'KL thành phẩm — thu mua (kg)',type:'ro',hint:'Máy chia theo tỉ lệ đầu vào'}
       ]},
       {m:'tach',title:'Luồng KHAI THÁC', fields:[
         {id:'c3_vao_kt',label:'KL nguyên liệu vào — khai thác (kg)',type:'ro',dflt:'31500',hint:'Tự lấy từ bước C-2'},
@@ -451,8 +461,6 @@ const FLOWS = [
         {id:'c3_tp',label:'Tổng KL thành phẩm (kg)',type:'ro',hint:'= KT + TM'},
         {id:'c3_sai_lech',label:'Tổng sai lệch so với nguyên liệu (kg)',type:'ro',full:1}
       ]},
-      {m:'chung',co:'auto',t:'PA2 — nhập 1 số tổng',x:'Máy suy KT/TM theo tỉ lệ Mã A đầu vào, sai lệch tính trên cả mẻ.'},
-      {m:'tach',co:'auto',t:'PA1 — nhập 2 số thật',x:'Xưởng ghi riêng từng nguồn, <b>sai lệch tính riêng cho khai thác và thu mua</b>.'},
       {title:'Chứng từ & thông tin kế thừa', fields:[
         {id:'c3_bb',label:'Biên bản xác nhận khối lượng chế biến',type:'file',req:1,full:1,
          hint:'Chứng từ minh chứng cho con số thành phẩm sau chế biến'},
@@ -480,31 +488,29 @@ const FLOWS = [
     nguoi:'Người phụ trách cân bằng', sla:'Ngay sau mỗi đợt chế biến', duyet:'—',
     body:[
       {co:'danger',t:'Xử lý sai lệch',x:'<b>Dư</b> → tự cộng ngược vào nguyên liệu đầu vào cho hiệu = 0. <b>Hụt</b> → không trừ nguyên liệu, bắt buộc giải trình.'},
-      {m:'chung',co:'warn',t:'PA2 — cân bằng trên cả mẻ',x:'Sai lệch tính chung, phần cộng ngược vào nguyên liệu giữ đúng tỉ lệ cơ cấu đầu vào.'},
-      {m:'tach',co:'auto',t:'PA1 — cân bằng riêng từng luồng',x:'Khai thác và thu mua cân bằng độc lập.'},
       {co:'info',t:'Ai thực hiện cân bằng',x:'Phiếu chỉ ghi nhận sai lệch và giải trình. Việc cộng ngược vào nguyên liệu và sinh Mã B điều chỉnh do <b>luồng n8n chạy trên bảng dữ liệu sau khi C-7 được duyệt</b>.'},
-      {m:'chung',title:'Số liệu cân bằng — cả mẻ', fields:[
+      {m:['chung','don'],title:'Số liệu cân bằng — cả mẻ', fields:[
         {id:'c5_vao',label:'KL nguyên liệu đầu vào (kg)',type:'num',calc:1},
         {id:'c5_tp',label:'KL thành phẩm (kg)',type:'num',calc:1},
         {id:'c5_lech',label:'Sai lệch (kg)',type:'ro'},
-        {id:'c5_huong',label:'Hướng xử lý',type:'ro',full:1}
+        {id:'c5_huong',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1,hint:'Hệ thống gợi ý theo dấu của sai lệch — người duyệt chọn lại nếu cần'}
       ]},
       {m:'tach',title:'Cân bằng luồng KHAI THÁC', fields:[
         {id:'c5_vao_kt',label:'KL nguyên liệu vào (kg)',type:'ro'},
         {id:'c5_tp_kt',label:'KL thành phẩm (kg)',type:'ro'},
         {id:'c5_lech_kt',label:'Sai lệch (kg)',type:'ro'},
-        {id:'c5_huong_kt',label:'Hướng xử lý',type:'ro',full:1},
+        {id:'c5_huong_kt',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1},
         {id:'c5_giai_trinh_kt',label:'Giải trình hao hụt luồng khai thác',type:'area',full:1,ph:'Bắt buộc khi hiệu âm…'}
       ]},
       {m:'tach',title:'Cân bằng luồng THU MUA', fields:[
         {id:'c5_vao_tm',label:'KL nguyên liệu vào (kg)',type:'ro'},
         {id:'c5_tp_tm',label:'KL thành phẩm (kg)',type:'ro'},
         {id:'c5_lech_tm',label:'Sai lệch (kg)',type:'ro'},
-        {id:'c5_huong_tm',label:'Hướng xử lý',type:'ro',full:1},
+        {id:'c5_huong_tm',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1},
         {id:'c5_giai_trinh_tm',label:'Giải trình hao hụt luồng thu mua',type:'area',full:1,ph:'Bắt buộc khi hiệu âm…'}
       ]},
       {title:'Giải trình & chứng từ', fields:[
-        {m:'chung',id:'c5_giai_trinh',label:'Giải trình hao hụt (bắt buộc khi hiệu âm)',type:'area',full:1,ph:'Nguyên nhân mất mủ / hao hụt trong chế biến...'},
+        {m:['chung','don'],id:'c5_giai_trinh',label:'Giải trình hao hụt (bắt buộc khi hiệu âm)',type:'area',full:1,ph:'Nguyên nhân mất mủ / hao hụt trong chế biến...'},
         {id:'c5_bb',label:'Biên bản xử lý sai lệch (mẫu chung — các phòng ban ký, lãnh đạo ký)',type:'file',req:1,full:1}
       ]},
     ]},
@@ -533,7 +539,6 @@ const FLOWS = [
         {id:'d1_ma_c',label:'Mã Lô chế biến nguồn (Mã C)',type:'ro',calc:1,inh:['2_1','c2_ma_c'],inhLbl:'C-2',hint:'Tự lấy từ phiếu QT3 nối sang'},
         {id:'d1_ma_sp',label:'Mã sản phẩm',type:'ro',inh:['2_3','c3_sp_tt'],inhLbl:'C-4'},
         {id:'d1_ngay',label:'Ngày nhập kho',type:'date',req:1,dflt:'2025-05-17'},
-        {id:'d1_kho',label:'Vị trí kho',type:'ro',ph:'KHO_GIA_CONG'},
         {id:'d1_kl_kt',label:'KL nhập — khai thác (kg)',type:'num',calc:1,hint:'Kế thừa từ C-4'},
         {id:'d1_kl_tm',label:'KL nhập — thu mua (kg)',type:'num',calc:1,hint:'Kế thừa từ C-4'},
         {id:'d1_kl',label:'Tổng số lượng nhập (kg)',type:'ro'}
@@ -620,15 +625,14 @@ const FLOWS = [
               {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'115px',ro:1},
               {k:'ton',l:'KL tồn (kg)',type:'num',w:'105px',ro:1},
               {k:'ngay',l:'Ngày nhập kho',type:'date',w:'130px',ro:1},
-              {k:'kho',l:'Khu vực kho',w:'130px',ro:1},
               {k:'kl',l:'KL xuất (kg)',type:'num',w:'110px',calc:1}],
-        def:[{chon:true,lo:'TP-CB250502-1',ma_c:'CB250502',tp:LOAI_TP[0],nguon:'Thu mua',ton:'5040',ngay:'2025-05-02',kho:'KHO_GIA_CONG',kl:'5040'},
-             {chon:true,lo:'TP-CB250501-3',ma_c:'CB250501',tp:LOAI_TP[0],nguon:'Thu mua',ton:'1820',ngay:'2025-05-15',kho:'KHO_GIA_CONG',kl:'1820'},
-             {chon:true,lo:'TP-CB250502-2',ma_c:'CB250502',tp:LOAI_TP[0],nguon:'Khai thác',ton:'5040',ngay:'2025-05-02',kho:'KHO_GIA_CONG',kl:'5040'},
-             {chon:true,lo:'TP-CB250501-1',ma_c:'CB250501',tp:LOAI_TP[0],nguon:'Khai thác',ton:'5040',ngay:'2025-05-15',kho:'KHO_GIA_CONG',kl:'5040'}],
+        def:[{chon:true,lo:'TP-CB250502-1',ma_c:'CB250502',tp:LOAI_TP[0],nguon:'Thu mua',ton:'5040',ngay:'2025-05-02',kl:'5040'},
+             {chon:true,lo:'TP-CB250501-3',ma_c:'CB250501',tp:LOAI_TP[0],nguon:'Thu mua',ton:'1820',ngay:'2025-05-15',kl:'1820'},
+             {chon:true,lo:'TP-CB250502-2',ma_c:'CB250502',tp:LOAI_TP[0],nguon:'Khai thác',ton:'5040',ngay:'2025-05-02',kl:'5040'},
+             {chon:true,lo:'TP-CB250501-1',ma_c:'CB250501',tp:LOAI_TP[0],nguon:'Khai thác',ton:'5040',ngay:'2025-05-15',kl:'5040'}],
         foot:[{k:'lo',lbl:'Σ ĐÃ CHỌN'},{k:'tp',id:'x3_m_can',pre:'Cần xuất:',c:'blue'},
               {k:'nguon',id:'x3_m_nguon',c:'green'},{k:'ton',id:'x3_m_ton',c:'amber'},
-              {k:'kl',id:'x3_m_chon',c:'teal'},{k:'kho',id:'x3_m_thieu',pre:'Thiếu/dư:',c:'red'}]}},
+              {k:'kl',id:'x3_m_chon',c:'teal'},{k:'ngay',id:'x3_m_thieu',pre:'Thiếu/dư:',c:'red'}]}},
       {btn:{id:'btn-fifo',label:'⚡ Sắp lại theo FIFO + phân bổ đúng khối lượng cần xuất',fn:'autoFIFO()'}},
       {co:'warn',t:'Quản lý tới mã lô',x:'Không xuất kho ở cấp Mã C: một Mã C tạo nhiều lô, mỗi lần xuất có thể chỉ xuất một phần.'}
     ]},
@@ -673,18 +677,22 @@ const FLOWS = [
    ============================================================ */
 function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
 // Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
-const STORE_VER='v22';
+const STORE_VER='v27-pa3';
 try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
 
 let MODE = ss('cs_mode')||'chung';          // 'chung' = gộp chung · 'tach' = tách 2 luồng
-const MODE_NAME = {tach:'Phương án 1 — Chế biến tách riêng từng nguồn', chung:'Phương án 2 — Chế biến gộp chung, tách thành phẩm theo tỉ lệ'};
+const MODE_NAME = {
+  chung:'Phương án 1 — Mẻ trộn 2 nguồn · ra nhập 1 số tổng, máy chia theo tỉ lệ đầu vào',
+  tach :'Phương án 2 — Mẻ trộn 2 nguồn · ra nhập riêng 2 khối lượng thật',
+  don  :'Phương án 3 — Mẻ chỉ chế biến 1 nguồn'
+};
 let cf = parseInt(ss('cs_cf')||'-1');
 let cs = FLOWS.map((_,i)=>parseInt(ss('cs_s'+i)||'0'));
 let state = {};
 try{ state = JSON.parse(ss('cs_state')||'{}'); }catch(e){ state={}; }
 
 function save(){ ss('cs_cf',cf); ss('cs_mode',MODE); cs.forEach((v,i)=>ss('cs_s'+i,v)); try{ ss('cs_state',JSON.stringify(state)); }catch(e){} }
-function inMode(o){ return !o.m || o.m===MODE; }
+function inMode(o){ return !o.m || (Array.isArray(o.m)? o.m.indexOf(MODE)>=0 : o.m===MODE); }
 function colsOf(t){ return t.cols.filter(inMode); }
 function key(){ return cf+'_'+cs[cf]; }
 function D(){ return state[key()]||{}; }
@@ -716,7 +724,7 @@ function fieldHTML(f,d){
   if(v==='' && f.inh){ const iv=inhVal(f); if(iv!==''){ v=iv; inherited=true; } }
   if(v==='' && f.dflt!==undefined) v=f.dflt;
   const cls = 'fgrp'+(f.full?' full':'');
-  const lab = '<label class="'+(f.req?'req':'')+'">'+esc(f.label)+(f.m?'<span class="dif-tag">'+(f.m==='chung'?'PA2':'PA1')+'</span>':'')+'</label>';
+  const lab = '<label class="'+(f.req?'req':'')+'">'+esc(f.label)+(f.m?'<span class="dif-tag">'+(Array.isArray(f.m)? f.m.map(function(x){return x==='chung'?'PA1':x==='tach'?'PA2':'PA3';}).join('/') : (f.m==='chung'?'PA1':f.m==='tach'?'PA2':'PA3'))+'</span>':'')+'</label>';
   const hint = (f.hint||inherited)?'<div class="fhint">'+(inherited?'<span class="inh-tag">↩ mặc định theo '+esc(f.inhLbl||'bước trước')+'</span> ':'')+(f.hint||'')+'</div>':'';
   const oi = f.calc?' oninput="recalc()" onchange="recalc()"':'';
   let inp='';
@@ -851,8 +859,9 @@ function renderTabs(){
 function renderMode(){
   document.getElementById('mode-bar').innerHTML =
     '<span class="mb-lbl">Khâu chế biến — chọn phương án:</span>'
-   +'<button class="mb-btn'+(MODE==='chung'?' on':'')+'" onclick="setMode(\'chung\')">🔱 PA1 · Chế biến tách nguồn</button>'
-   +'<button class="mb-btn'+(MODE==='tach'?' on':'')+'" onclick="setMode(\'tach\')">🔀 PA2 · Chế biến gộp mẻ</button>'
+   +'<button class="mb-btn'+(MODE==='chung'?' on':'')+'" onclick="setMode(\'chung\')">1️⃣ PA1 · Ra nhập 1 số tổng</button>'
+   +'<button class="mb-btn'+(MODE==='tach'?' on':'')+'" onclick="setMode(\'tach\')">🔢 PA2 · Ra nhập riêng KT / TM</button>'
+   +'<button class="mb-btn'+(MODE==='don'?' on':'')+'" onclick="setMode(\'don\')">🧩 PA3 · Mẻ 1 nguồn</button>'
    +'<button class="mb-btn mb-cmp'+(cf===-3?' on':'')+'" onclick="goCompare()">⚖ So sánh 2 phương án</button>';
 }
 
@@ -1051,21 +1060,30 @@ function calcC4(){
   const st=state['2_1']||{};
   const eC=document.getElementById('c4_ma_c'); if(eC && st._maC) eC.value=st._maC;
   let kt=0,tm=0,tp=0,vao=0,vKt=0,vTm=0,lKt=0,lTm=0;
-  if(MODE==='chung'){
+  if(MODE==='don'){
     const eVao=document.getElementById('c3_vao');
-    if(eVao && !eVao.value && st._vao) eVao.value=st._vao;
-    vao=n(eVao?.value); vKt=n(st._kt)||vao; vTm=n(st._tm);
+    if(eVao && st._vao) eVao.value=st._vao;
+    vao=n(eVao?.value);
     tp=n(document.getElementById('c3_tp')?.value);
-    const vTong=vKt+vTm;
-    kt = vTong? tp*vKt/vTong : 0;
-    tm = vTong? tp*vTm/vTong : 0;
-    setRO('c3_tp_kt', tp? fmt(kt)+(vTong?' ('+fmt(vKt/vTong*100)+'%)':'') : '');
-    setRO('c3_tp_tm', tp? fmt(tm)+(vTong?' ('+fmt(vTm/vTong*100)+'%)':'') : '');
+    const ng=document.getElementById('c3_nguon')?.value||'';
+    if(ng===NGUON[1]){ tm=tp; vTm=vao; } else { kt=tp; vKt=vao; }
+  } else if(MODE==='chung'){
+    const eKt=document.getElementById('c3_vao_kt'), eTm=document.getElementById('c3_vao_tm'), eV=document.getElementById('c3_vao');
+    if(eKt && st._kt!==undefined && st._kt!=='') eKt.value=Math.round(n(st._kt)*100)/100;
+    if(eTm && st._tm!==undefined && st._tm!=='') eTm.value=Math.round(n(st._tm)*100)/100;
+    vKt=n(eKt?.value); vTm=n(eTm?.value); vao=vKt+vTm;
+    if(eV) eV.value=fmt(vao);
+    setRO('c3_ty_le', vao? 'KT '+fmt(vKt/vao*100)+'% · TM '+fmt(vTm/vao*100)+'%' : '');
+    tp=n(document.getElementById('c3_tp')?.value);
+    kt = vao? tp*vKt/vao : 0;
+    tm = vao? tp*vTm/vao : 0;
+    setRO('c3_tp_kt', tp? fmt(kt)+(vao?' ('+fmt(vKt/vao*100)+'%)':'') : '');
+    setRO('c3_tp_tm', tp? fmt(tm)+(vao?' ('+fmt(vTm/vao*100)+'%)':'') : '');
     lKt=kt-vKt; lTm=tm-vTm;
   } else {
     const eKt=document.getElementById('c3_vao_kt'), eTm=document.getElementById('c3_vao_tm');
-    if(eKt && !eKt.value && st._kt) eKt.value=st._kt;
-    if(eTm && !eTm.value && st._tm) eTm.value=st._tm;
+    if(eKt && st._kt!==undefined && st._kt!=='') eKt.value=Math.round(n(st._kt)*100)/100;
+    if(eTm && st._tm!==undefined && st._tm!=='') eTm.value=Math.round(n(st._tm)*100)/100;
     vKt=n(eKt?.value); vTm=n(eTm?.value); vao=vKt+vTm;
     kt=n(document.getElementById('c3_tp_kt')?.value); tm=n(document.getElementById('c3_tp_tm')?.value); tp=kt+tm;
     lKt=kt-vKt; lTm=tm-vTm;
@@ -1083,22 +1101,26 @@ function calcC4(){
 
 function calcC6(){
   const s3=state['2_3']||{};
-  function huong(l){ return l>0? 'Hiệu dương → tự cộng '+fmt(l)+' kg vào nguyên liệu đầu vào'
-                   : l<0? 'Hiệu âm → BẮT BUỘC giải trình, không trừ nguyên liệu' : 'Đã cân bằng — hiệu số = 0'; }
+  function huong(id,l){
+    const e=document.getElementById(id); if(!e || e.value) return;
+    e.value = l>0? 'Cộng phần dư vào nguyên liệu đầu vào'
+            : l<0? 'Giải trình hao hụt — không trừ nguyên liệu'
+            : 'Hiệu số = 0 — không cần xử lý';
+  }
   if(MODE==='tach'){
     const vKt=n(s3._vKt), tKt=n(s3._kt), lKt=tKt-vKt;
     const vTm=n(s3._vTm), tTm=n(s3._tm), lTm=tTm-vTm;
     setRO('c5_vao_kt',fmt(vKt)); setRO('c5_tp_kt',fmt(tKt));
-    setRO('c5_lech_kt',(lKt>=0?'+':'')+fmt(lKt)+' kg'); setRO('c5_huong_kt',huong(lKt));
+    setRO('c5_lech_kt',(lKt>=0?'+':'')+fmt(lKt)+' kg'); huong('c5_huong_kt',lKt);
     setRO('c5_vao_tm',fmt(vTm)); setRO('c5_tp_tm',fmt(tTm));
-    setRO('c5_lech_tm',(lTm>=0?'+':'')+fmt(lTm)+' kg'); setRO('c5_huong_tm',huong(lTm));
+    setRO('c5_lech_tm',(lTm>=0?'+':'')+fmt(lTm)+' kg'); huong('c5_huong_tm',lTm);
   } else {
     const eV=document.getElementById('c5_vao'), eT=document.getElementById('c5_tp');
     if(eV && !eV.value && s3._vao) eV.value=s3._vao;
     if(eT && !eT.value && s3._tp) eT.value=s3._tp;
     const vao=n(eV?.value), tp=n(eT?.value), lech=tp-vao;
     setRO('c5_lech',(lech>=0?'+':'')+fmt(lech)+' kg');
-    setRO('c5_huong', (vao||tp)? huong(lech) : '');
+    if(vao||tp) huong('c5_huong',lech);
   }
 }
 
@@ -1137,7 +1159,6 @@ function calcD1(){
   const maC=(s3._maC)||(state['2_1']||{})._maC||'CB250501';
   setRO('d1_ma_c',maC);
   setRO('d1_ma_nk','F03N-'+pad((state['3_0']||{})._stt||1,3));
-  const eK=document.getElementById('d1_kho'); if(eK && !eK.value) eK.value='KHO_GIA_CONG';
   const kt=n(fKt?.value), tm=n(fTm?.value), tong=kt+tm;
   setRO('d1_kl', tong? fmt(tong) : '');
   state['3_0']=Object.assign({},state['3_0'],{_kl:tong,_kt:kt,_tm:tm,_maD:'TP-'+maC});
@@ -1294,15 +1315,16 @@ function goOverview(){
    SO SÁNH 2 PHƯƠNG ÁN
    ============================================================ */
 const CMP=[
- ['B — Phân lô lưu trữ','Mã A lưu riêng theo Khai thác / Thu mua — mỗi Mã B một nguồn','Giống hệt — Mã B luôn một nguồn','<b>Không khác</b>'],
- ['C-1 Lọc Mã B','Lọc thêm <b>nguồn cần chế biến</b> → một lệnh một nguồn','Không lọc nguồn → gom được Mã B cả hai nguồn','Điều kiện lọc'],
- ['Mã C','Mỗi Mã C thuộc <b>một nguồn</b>','Mã C có thể là <b>mẻ trộn</b> hai nguồn','Bản chất mẻ'],
- ['Số lệnh chế biến','Ngày nào chạy cả hai nguồn thì 2 lệnh','Một lệnh cho cả mẻ','Khối lượng thao tác'],
- ['C-4 Thành phẩm','Nhập <b>một con số</b>, nguồn kế thừa từ Mã C','Nhập tổng, máy suy KT/TM <b>theo tỉ lệ</b> đầu vào','Cách xác định 2 luồng'],
- ['C-6 Sai lệch','Thuộc trọn một nguồn','Phân bổ theo tỉ lệ đầu vào','Cách xử lý chênh lệch'],
- ['Lô thành phẩm','Mỗi lô thuộc một nguồn, rõ tuyệt đối','Lô mang nhãn nguồn theo tỉ lệ đã suy','Chất lượng dữ liệu'],
- ['X-3 Xuất kho','Lọc thẳng theo nguồn của Mã C','Lọc theo nhãn nguồn của lô','Ảnh hưởng khi xuất'],
- ['Phù hợp khi','Nhà máy chạy tách mẻ được theo nguồn','Nhà máy trộn chung mẻ như hiện nay','Điều kiện thực tế']
+ ['Mẻ chế biến','Trộn khai thác + thu mua','Trộn khai thác + thu mua','<b>Chỉ một nguồn</b>'],
+ ['Nguyên liệu vào (C-2)','Ghi riêng từng nguồn theo Mã B','Ghi riêng từng nguồn theo Mã B','Chỉ một nguồn'],
+ ['Nhập thành phẩm (C-4)','<b>1 số tổng</b>','<b>2 số</b>: khai thác và thu mua','<b>1 số</b>, nguồn kế thừa'],
+ ['Thành phẩm từng nguồn','Máy chia theo <b>tỉ lệ đầu vào</b>','<b>Số cân thật</b> tại xưởng','Không phải chia — cả mẻ một nguồn'],
+ ['Việc thêm ở xưởng','Không có','Phải tách và cân riêng từng nguồn','Không có, nhưng phải chạy tách mẻ'],
+ ['Sai lệch','Tính chung cả mẻ','Tính riêng 2 luồng','Tính cho một luồng'],
+ ['Cân bằng KL (C-6)','Một lần cho cả mẻ','Hai luồng độc lập','Một lần'],
+ ['Độ chính xác số liệu','Đúng khi hiệu suất 2 nguồn tương đương','Số thật','Số thật — rõ tuyệt đối'],
+ ['Số lệnh chế biến','1 lệnh','1 lệnh','2 lệnh nếu ngày đó chạy cả 2 nguồn'],
+ ['Nhập kho · chia lô · xuất kho','Như nhau','Như nhau','Như nhau']
 ];
 
 function goCompare(){
@@ -1310,35 +1332,40 @@ function goCompare(){
   document.getElementById('hdr-wrap').innerHTML =
     '<div class="hdr" style="background:linear-gradient(135deg,#1a1a2e,#3D1C72)">'
     +'<div class="hdr-badge">Câu hỏi mở của anh Bảo — cuối buổi khảo sát</div>'
-    +'<h1>Chế biến tách nguồn hay gộp mẻ?</h1>'
-    +'<p>Nguyên liệu đã lưu riêng theo nguồn từ Mã B — khác nhau bắt đầu từ khâu chế biến</p></div>';
+    +'<h1>Ba cách xử lý khai thác / thu mua khi chế biến</h1>'
+    +'<p>Nguyên liệu vào luôn ghi riêng từng nguồn — khác nhau ở cách ghi thành phẩm ra</p></div>';
   document.getElementById('step-nav').innerHTML='';
-  const head='<tr><th style="width:150px">Điểm khác</th><th style="width:34%">🔱 PA1 · Tách riêng theo NCC</th><th style="width:34%">🔀 PA2 · Gộp chung</th><th>Ảnh hưởng</th></tr>';
+  const head='<tr><th style="width:140px">Điểm khác</th><th>1️⃣ PA1 · Ra 1 số tổng</th><th>🔢 PA2 · Ra 2 số thật</th><th>🧩 PA3 · Mẻ 1 nguồn</th></tr>';
   document.getElementById('sc').innerHTML='<div style="padding:20px 22px">'
    +'<div class="callout co-info"><span class="co-t">Bối cảnh</span>'
-   +'Ở khâu <b>phân lô lưu trữ</b>, Mã A luôn được lưu riêng theo Khai thác / Thu mua nên <b>mỗi Mã B chỉ một nguồn</b>. Câu hỏi còn lại nằm ở khâu chế biến: một lệnh chế biến chỉ gom Mã B <b>cùng một nguồn</b> (PA1), hay cho phép <b>gộp mẻ</b> hai nguồn rồi tách thành phẩm theo tỉ lệ (PA2)?</div>'
+   +'Mã B luôn một nguồn, và <b>nguyên liệu đưa vào chế biến luôn ghi riêng</b> khai thác lấy bao nhiêu, thu mua lấy bao nhiêu. Khác nhau ở đầu ra: nhập <b>1 số tổng</b> rồi máy chia theo tỉ lệ đầu vào (PA1), xưởng <b>cân riêng nhập 2 số</b> (PA2), hay <b>chỉ chế biến một nguồn</b> nên không phải chia (PA3)?</div>'
    +'<div class="tw"><table><thead>'+head+'</thead><tbody>'
    + CMP.map(r=>'<tr><td style="font-weight:600;font-size:12.5px">'+r[0]+'</td>'
-       +'<td style="font-size:12.5px;background:'+(MODE==='tach'?'#F0FAF6':'#fff')+'">'+r[1]+'</td>'
-       +'<td style="font-size:12.5px;background:'+(MODE==='chung'?'#F0F6FD':'#fff')+'">'+r[2]+'</td>'
-       +'<td style="font-size:12px;color:var(--g500)">'+r[3]+'</td></tr>').join('')
+       +'<td style="font-size:12.5px;background:'+(MODE==='chung'?'#F0F6FD':'#fff')+'">'+r[1]+'</td>'
+       +'<td style="font-size:12.5px;background:'+(MODE==='tach'?'#F0FAF6':'#fff')+'">'+r[2]+'</td>'
+       +'<td style="font-size:12.5px;background:'+(MODE==='don'?'#F8F4FD':'#fff')+'">'+r[3]+'</td></tr>').join('')
    +'</tbody></table></div>'
-   +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">'
-   +'<div style="border:1px solid var(--teal);border-radius:10px;padding:14px;background:var(--teal-xl)">'
-     +'<div style="font-weight:700;color:var(--teal-dark);margin-bottom:6px">🔱 PA1 · Chế biến tách nguồn</div>'
-     +'<div style="font-size:12.5px;color:var(--g700);line-height:1.6"><b>Được:</b> nguồn rõ tuyệt đối từ Mã A đến lô xuất, thành phẩm là số thật, xuất kho lọc thẳng theo Mã C.<br/>'
-     +'<b>Phải chấp nhận:</b> nhà máy phải chạy tách mẻ; ngày nào chế biến cả hai nguồn là hai lệnh, hai bộ cân bằng khối lượng.</div></div>'
+   +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px">'
    +'<div style="border:1px solid var(--blue);border-radius:10px;padding:14px;background:var(--blue-xl)">'
-     +'<div style="font-weight:700;color:var(--blue-dark);margin-bottom:6px">🔀 PA2 · Chế biến gộp mẻ</div>'
-     +'<div style="font-size:12.5px;color:var(--g700);line-height:1.6"><b>Được:</b> một lệnh cho cả mẻ, sát cách nhà máy đang chạy khi trộn chung hai nguồn.<br/>'
-     +'<b>Phải chấp nhận:</b> khối lượng khai thác / thu mua của thành phẩm là số suy theo tỉ lệ, lệch nếu hiệu suất hai nguồn khác nhau.</div></div>'
+     +'<div style="font-weight:700;color:var(--blue-dark);margin-bottom:6px">1️⃣ PA1 · Ra nhập 1 số tổng</div>'
+     +'<div style="font-size:12.5px;color:var(--g700);line-height:1.6"><b>Được:</b> xưởng cân một lần như hiện nay; máy chia khai thác / thu mua theo tỉ lệ nguyên liệu đầu vào.<br/>'
+     +'<b>Mất:</b> số từng nguồn là số chia ra, lệch nếu hiệu suất hai nguồn khác nhau.</div></div>'
+   +'<div style="border:1px solid var(--teal);border-radius:10px;padding:14px;background:var(--teal-xl)">'
+     +'<div style="font-weight:700;color:var(--teal-dark);margin-bottom:6px">🔢 PA2 · Ra nhập 2 số thật</div>'
+     +'<div style="font-size:12.5px;color:var(--g700);line-height:1.6"><b>Được:</b> số từng nguồn là số cân thật, hồ sơ EUDR vững nhất khi vẫn trộn mẻ.<br/>'
+     +'<b>Mất:</b> xưởng phải tách và cân riêng phần thành phẩm của từng nguồn.</div></div>'
+   +'<div style="border:1px solid var(--purple);border-radius:10px;padding:14px;background:var(--purple-xl)">'
+     +'<div style="font-weight:700;color:var(--purple-dark);margin-bottom:6px">🧩 PA3 · Mẻ chỉ 1 nguồn</div>'
+     +'<div style="font-size:12.5px;color:var(--g700);line-height:1.6"><b>Được:</b> đơn giản nhất — không chia tỉ lệ, không nhập 2 số, truy xuất rõ tuyệt đối.<br/>'
+     +'<b>Mất:</b> nhà máy phải chạy tách mẻ; ngày nào chế biến cả hai nguồn là hai lệnh, hai bộ cân bằng.</div></div>'
    +'</div>'
-   +'<div class="callout co-warn" style="margin-top:16px"><span class="co-t">Điểm cần lưu ý</span>'
-   +'Theo tài liệu: <b>phương án được chọn ảnh hưởng tới cách quản lý nguồn ở các bước sau, đặc biệt khi xuất kho</b> — vì lúc đó phải ưu tiên xuất hết thu mua rồi mới tới khai thác. '
-   +'Bấm nút phía trên để xem form đổi ra sao ở C-1 và C-4.</div>'
+   +'<div class="callout co-warn" style="margin-top:16px"><span class="co-t">Chốt cái nào cũng không ảnh hưởng phần sau</span>'
+   +'Gom Mã B, chia lô, nhập kho, xuất kho chạy y hệt ở cả ba. Nếu nhà máy <b>tách mẻ được</b> thì PA3 là gọn nhất. '
+   +'Nếu vẫn trộn mẻ: chạy <b>PA1</b> trước vì không bắt xưởng đổi cách cân, khi nào cần con số thật thì bật sang <b>PA2</b>.</div>'
    +'<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'
-   +'<button class="btn btn-p0" onclick="setMode(\'tach\');goFlow(2)">Xem form theo PA1 →</button>'
-   +'<button class="btn btn-p1" onclick="setMode(\'chung\');goFlow(2)">Xem form theo PA2 →</button>'
+   +'<button class="btn btn-p0" onclick="setMode(\'chung\');goFlow(2)">Xem PA1 →</button>'
+   +'<button class="btn btn-p1" onclick="setMode(\'tach\');goFlow(2)">Xem PA2 →'
+   +'<button class="btn btn-p2" onclick="setMode(\'don\');goFlow(2)">Xem PA3 →</button></button>'
    +'<button class="btn" onclick="window.print()">🖨 In bản so sánh</button></div></div>';
   scrollTo(0,0);
 }
