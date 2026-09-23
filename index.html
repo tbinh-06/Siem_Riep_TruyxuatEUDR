@@ -52,6 +52,17 @@ body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--g100);co
 .mb-btn.on{background:#fff;color:#1a1a2e;font-weight:600;border-color:#fff}
 .mb-cmp{margin-left:auto;border-color:var(--amber);color:#FAEEDA}
 .mb-cmp.on{background:var(--amber);color:#fff;border-color:var(--amber)}
+/* đánh dấu phần khác nhau giữa các phương án */
+.dm{padding:9px 11px;border-radius:8px;border-left:3px solid var(--g300);background:var(--g50)}
+.dm-chung{border-left-color:var(--blue);background:rgba(24,95,165,.05)}
+.dm-tach{border-left-color:var(--teal);background:rgba(26,122,94,.05)}
+.dm-don{border-left-color:var(--purple);background:rgba(123,47,160,.05)}
+.dm-multi{border-left-color:var(--amber);background:rgba(133,79,11,.05)}
+.dm-sec{padding:12px 14px;border-radius:10px;border-left:3px solid var(--g300);background:var(--g50);margin-bottom:22px}
+.dm-sec .stitle{margin-top:0}
+.dmc{background:rgba(123,47,160,.04)}
+th.dmc{background:var(--purple-light)}
+.mb-hint{font-size:10.5px;color:rgba(255,255,255,.55);margin-left:4px}
 .multi{display:flex;flex-wrap:wrap;gap:7px}
 .mchk{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--g700);background:var(--g50);border:1px solid var(--g300);border-radius:20px;padding:6px 13px;cursor:pointer;text-transform:none;letter-spacing:0}
 .mchk:hover{background:var(--g100)}
@@ -368,7 +379,7 @@ const FLOWS = [
       {title:'Tiêu chí lọc Mã B', fields:[
         {id:'c1_tu',label:'Ngày phân lô Mã B — từ',type:'date',dflt:'2025-05-10'},
         {id:'c1_den',label:'Ngày phân lô Mã B — đến',type:'date',dflt:'2025-05-14'},
-        {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Chọn nhiều ô — một mẻ chế biến gom được Mã B từ nhiều ô'}
+        {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,req:1,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Ô đã tách sẵn theo nguồn — chọn ô nào là lấy mủ nguồn đó'}
       ]},
       {m:['chung','tach'],co:'info',t:'Mẻ trộn 2 nguồn',x:'Gom được Mã B khai thác lẫn thu mua. Nguyên liệu vào luôn ghi riêng từng nguồn theo Mã B.'},
       {m:'don',co:'info',t:'Mẻ 1 nguồn',x:'Chỉ chọn các ô lưu trữ <b>cùng một nguồn</b> — nguồn của mẻ suy ra từ ô. Không phải chia tỉ lệ, không phải nhập 2 số.'},
@@ -676,7 +687,7 @@ const FLOWS = [
    ============================================================ */
 function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
 // Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
-const STORE_VER='v28';
+const STORE_VER='v29';
 try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
 
 let MODE = ss('cs_mode')||'chung';          // 'chung' = gộp chung · 'tach' = tách 2 luồng
@@ -722,7 +733,8 @@ function fieldHTML(f,d){
   let inherited=false;
   if(v==='' && f.inh){ const iv=inhVal(f); if(iv!==''){ v=iv; inherited=true; } }
   if(v==='' && f.dflt!==undefined) v=f.dflt;
-  const cls = 'fgrp'+(f.full?' full':'');
+  const dm = f.m? ' dm dm-'+(Array.isArray(f.m)? 'multi' : f.m) : '';
+  const cls = 'fgrp'+(f.full?' full':'')+dm;
   const lab = '<label class="'+(f.req?'req':'')+'">'+esc(f.label)+(f.m?'<span class="dif-tag">'+(Array.isArray(f.m)? f.m.map(function(x){return x==='chung'?'PA1':x==='tach'?'PA2':'PA3';}).join('/') : (f.m==='chung'?'PA1':f.m==='tach'?'PA2':'PA3'))+'</span>':'')+'</label>';
   const hint = (f.hint||inherited)?'<div class="fhint">'+(inherited?'<span class="inh-tag">↩ mặc định theo '+esc(f.inhLbl||'bước trước')+'</span> ':'')+(f.hint||'')+'</div>':'';
   const oi = f.calc?' oninput="recalc()" onchange="recalc()"':'';
@@ -770,7 +782,7 @@ function cellHTML(c,row){
 }
 
 function rowHTML(t,row){
-  return '<tr>'+colsOf(t).map(c=>'<td'+(c.w?' style="width:'+c.w+'"':'')+'>'+cellHTML(c,row)+'</td>').join('')
+  return '<tr>'+colsOf(t).map(c=>'<td'+(c.m?' class="dmc"':'')+(c.w?' style="width:'+c.w+'"':'')+'>'+cellHTML(c,row)+'</td>').join('')
     +'<td style="width:28px"><button class="tdel" onclick="this.closest(\'tr\').remove();recalc()">×</button></td></tr>';
 }
 
@@ -787,7 +799,7 @@ function tableHTML(t,d){
       return '<td class="tf tv-'+(f.c||'blue')+'">'+(f.pre?'<span class="tf-pre">'+esc(f.pre)+'</span>':'')+'<span id="'+f.id+'">—</span></td>';
     }).join('')+'<td class="tf"></td></tr></tfoot>';
   }
-  return '<div class="tw"><table><thead><tr>'+colsOf(t).map(c=>'<th'+(c.w?' style="width:'+c.w+'"':'')+'>'+esc(c.l)+'</th>').join('')
+  return '<div class="tw"><table><thead><tr>'+colsOf(t).map(c=>'<th'+(c.m?' class="dmc"':'')+(c.w?' style="width:'+c.w+'"':'')+'>'+esc(c.l)+'</th>').join('')
     +'<th style="width:28px"></th></tr></thead><tbody id="tb-'+t.id+'">'+rows.map(r=>rowHTML(t,r)).join('')+'</tbody>'+foot+'</table></div>'
     +'<button class="tadd tadd-'+cf+'" onclick="addRow(\''+t.id+'\')">'+esc(t.add||'+ Thêm dòng')+'</button>';
 }
@@ -804,8 +816,11 @@ function blockHTML(b,d){
       + '<td class="tot-lbl">Σ TỔNG</td>'
       + ms.map(m=>'<td class="tot-val tv-'+m.c+'" id="'+m.id+'">—</td>').join('')
       + '</tr></tbody></table></div>'; }
-  let h='<div class="fs">';
-  if(b.title) h+='<div class="stitle st'+cf+'">'+esc(b.title)+'</div>';
+  const secDm = b.m? ' dm-sec dm-'+(Array.isArray(b.m)? 'multi' : b.m) : '';
+  let h='<div class="fs'+secDm+'">';
+  if(b.title) h+='<div class="stitle st'+cf+'">'+esc(b.title)
+      +(b.m?'<span class="dif-tag">'+(Array.isArray(b.m)? b.m.map(function(x){return x==='chung'?'PA1':x==='tach'?'PA2':'PA3';}).join('/') : (b.m==='chung'?'PA1':b.m==='tach'?'PA2':'PA3'))+'</span>':'')
+      +'</div>';
   if(b.fields) h+='<div class="fg">'+b.fields.filter(inMode).map(f=>fieldHTML(f,d)).join('')+'</div>';
   if(b.table) h+=tableHTML(b.table,d);
   if(b.check) h+=b.check.map((c,i)=>'<div class="ck-row"><input type="checkbox" id="ck_'+i+'" '+(d['ck_'+i]?'checked':'')
@@ -861,7 +876,8 @@ function renderMode(){
    +'<button class="mb-btn'+(MODE==='chung'?' on':'')+'" onclick="setMode(\'chung\')">1️⃣ PA1 · Ra nhập 1 số tổng</button>'
    +'<button class="mb-btn'+(MODE==='tach'?' on':'')+'" onclick="setMode(\'tach\')">🔢 PA2 · Ra nhập riêng KT / TM</button>'
    +'<button class="mb-btn'+(MODE==='don'?' on':'')+'" onclick="setMode(\'don\')">🧩 PA3 · Mẻ 1 nguồn</button>'
-   +'<button class="mb-btn mb-cmp'+(cf===-3?' on':'')+'" onclick="goCompare()">⚖ So sánh 2 phương án</button>';
+   +'<span class="mb-hint">ô có viền màu = phần khác nhau</span>'
+   +'<button class="mb-btn mb-cmp'+(cf===-3?' on':'')+'" onclick="goCompare()">⚖ So sánh 3 phương án</button>';
 }
 
 function setMode(m){
