@@ -366,13 +366,12 @@ const FLOWS = [
         {id:'c1_kcs',label:'Người kiểm tra KCS (nếu có)',type:'text',dflt:'Phạm D — KCS'}
       ]},
       {title:'Tiêu chí lọc Mã B', fields:[
-        {m:'don',id:'c1_nguon',label:'Nguồn chế biến của mẻ',type:'sel',opts:NGUON,req:1,full:1,dflt:NGUON[0],hint:'PA3: cả mẻ chỉ một nguồn — hệ thống chỉ trả Mã B cùng nguồn'},
         {id:'c1_tu',label:'Ngày phân lô Mã B — từ',type:'date',dflt:'2025-05-10'},
         {id:'c1_den',label:'Ngày phân lô Mã B — đến',type:'date',dflt:'2025-05-14'},
         {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Chọn nhiều ô — một mẻ chế biến gom được Mã B từ nhiều ô'}
       ]},
       {m:['chung','tach'],co:'info',t:'Mẻ trộn 2 nguồn',x:'Gom được Mã B khai thác lẫn thu mua. Nguyên liệu vào luôn ghi riêng từng nguồn theo Mã B.'},
-      {m:'don',co:'info',t:'Mẻ 1 nguồn',x:'Chỉ gom Mã B cùng nguồn đã chọn. Không phải chia tỉ lệ, không phải nhập 2 số.'},
+      {m:'don',co:'info',t:'Mẻ 1 nguồn',x:'Chỉ chọn các ô lưu trữ <b>cùng một nguồn</b> — nguồn của mẻ suy ra từ ô. Không phải chia tỉ lệ, không phải nhập 2 số.'},
       {co:'auto',t:'Sau khi gửi xử lý',x:'Hệ thống sinh <b>Mã C = CB[YYMMDD]</b> và trả danh sách Mã B chưa chế biến khớp tiêu chí sang bước C-2.'}
     ]},
   { code:'C-2', title:'Chọn Mã B đưa vào chế biến', desc:'Hệ thống trả danh sách — người dùng thêm bớt và điền KL',
@@ -429,7 +428,7 @@ const FLOWS = [
       {title:'Kết quả chế biến', fields:[
         {id:'c4_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro',ph:'CB250501',inh:['2_1','c2_ma_c'],inhLbl:'C-2'},
         {id:'c3_sp_tt',label:'Sản phẩm thực tế',type:'sel',opts:LOAI_TP,inh:['2_0','c1_loai_tp'],inhLbl:'C-1 · sản phẩm mục tiêu',hint:'Sửa lại nếu phân loại lại sau kiểm tra chất lượng'},
-        {m:'don',id:'c3_nguon',label:'Nguồn của mẻ',type:'ro',inh:['2_0','c1_nguon'],inhLbl:'C-1',dflt:NGUON[0]},
+        {m:'don',id:'c3_nguon',label:'Nguồn của mẻ',type:'ro',hint:'Suy từ ô lưu trữ đã chọn ở C-1'},
         {m:'don',id:'c3_vao',label:'KL nguyên liệu đầu vào (kg quy khô)',type:'ro',dflt:'31500',hint:'Tự lấy từ bước C-2'},
         {m:'don',id:'c3_tp',label:'KL thành phẩm (kg)',type:'num',calc:1,req:1,dflt:'35400',hint:'Một con số — cả mẻ một nguồn'},
         {m:'don',id:'c3_sai_lech',label:'Sai lệch so với nguyên liệu (kg)',type:'ro',full:1}
@@ -677,7 +676,7 @@ const FLOWS = [
    ============================================================ */
 function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
 // Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
-const STORE_VER='v27-pa3';
+const STORE_VER='v28';
 try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
 
 let MODE = ss('cs_mode')||'chung';          // 'chung' = gộp chung · 'tach' = tách 2 luồng
@@ -1065,7 +1064,9 @@ function calcC4(){
     if(eVao && st._vao) eVao.value=st._vao;
     vao=n(eVao?.value);
     tp=n(document.getElementById('c3_tp')?.value);
-    const ng=document.getElementById('c3_nguon')?.value||'';
+    const khu=String((state['2_0']||{}).c1_khu||'');
+    const ng = khu && khu.indexOf('Ô BR')>=0 && khu.indexOf('Tây Ninh')<0 ? NGUON[1] : NGUON[0];
+    setRO('c3_nguon',ng);
     if(ng===NGUON[1]){ tm=tp; vTm=vao; } else { kt=tp; vKt=vao; }
   } else if(MODE==='chung'){
     const eKt=document.getElementById('c3_vao_kt'), eTm=document.getElementById('c3_vao_tm'), eV=document.getElementById('c3_vao');
