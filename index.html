@@ -63,6 +63,25 @@ body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--g100);co
 .dmc{background:rgba(123,47,160,.04)}
 th.dmc{background:var(--purple-light)}
 .mb-hint{font-size:10.5px;color:rgba(255,255,255,.55);margin-left:4px}
+/* phân loại trường */
+.fk-tag{display:inline-block;border-radius:9px;padding:0 7px;font-size:9.5px;font-weight:700;margin-left:6px;vertical-align:middle;letter-spacing:.02em;text-transform:none}
+.t-fill{background:#FDE8D8;color:#7A3208;border:1px solid #C25B10}
+.t-inh{background:var(--teal-light);color:var(--teal);border:1px solid var(--teal)}
+.t-auto{background:var(--g200);color:var(--g500);border:1px solid var(--g400)}
+.t-app{background:var(--purple-light);color:var(--purple);border:1px solid var(--purple)}
+.fk-fill input,.fk-fill select,.fk-fill textarea,.fk-fill .mdd-btn{background:var(--w);border-color:#E3B892}
+.fk-fill input:hover,.fk-fill select:hover,.fk-fill textarea:hover{border-color:var(--orange)}
+.fk-legend{display:flex;flex-wrap:wrap;gap:14px;padding:8px 22px;border-bottom:1px solid var(--g200);background:var(--g50);font-size:11px;color:var(--g500)}
+.mdd{position:relative}
+.mdd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 11px;border:1px solid var(--g300);border-radius:var(--r);background:var(--g50);font-family:inherit;font-size:13px;color:var(--g900);cursor:pointer;text-align:left;text-transform:none;letter-spacing:0}
+.mdd-btn:hover{background:var(--w)}
+.mdd-ar{color:var(--g400);font-size:11px}
+.mdd-panel{display:none;position:absolute;z-index:60;top:calc(100% + 4px);left:0;right:0;background:var(--w);border:1px solid var(--g300);border-radius:var(--r);box-shadow:0 6px 18px rgba(0,0,0,.12);padding:5px;max-height:220px;overflow:auto}
+.mdd-panel.open{display:block}
+.mdd-opt{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;font-size:12.5px;color:var(--g700);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:500}
+.mdd-opt:hover{background:var(--g100)}
+.mdd-opt.on{background:var(--teal-light);color:var(--teal-dark)}
+.mdd-opt input{width:15px;height:15px;margin:0}
 .multi{display:flex;flex-wrap:wrap;gap:7px}
 .mchk{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--g700);background:var(--g50);border:1px solid var(--g300);border-radius:20px;padding:6px 13px;cursor:pointer;text-transform:none;letter-spacing:0}
 .mchk:hover{background:var(--g100)}
@@ -152,7 +171,7 @@ tfoot td{background:var(--g100);font-weight:600}
 .gia-dinh{display:inline-block;background:var(--amber-light);color:var(--amber);border:1px solid var(--amber);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px;vertical-align:middle}
 
 .ck-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--g100)}
-.tf{background:var(--g100);border-top:2px solid var(--g300);padding:7px 8px;font-size:13.5px;font-weight:700}
+.tf{background:var(--g100);border-top:2px solid var(--g300);padding:6px 10px;font-size:13.5px;font-weight:700}
 .tf-lbl{font-size:10.5px;letter-spacing:.06em;color:var(--g500);text-align:center}
 .tf-pre{font-size:10px;font-weight:500;color:var(--g500);margin-right:3px}
 .tv-blue{color:var(--blue)}.tv-teal{color:var(--teal)}.tv-amber{color:var(--amber)}
@@ -224,13 +243,22 @@ const POOL = {
     {ma_a:'2025050106',ngay:'2025-05-12',to:'BR',nguon:'Thu mua — Best Royal (BR)',loai_mu:'Mủ tạp',xe:'BR-05',phieu:'PC006',tuoi:'6500',drc:'30.0',kho:'1950'},
     {ma_a:'2025050107',ngay:'2025-05-12',to:'TN/T03',nguon:'Khai thác — Tổ 1–10 (TN)',loai_mu:'Mủ tạp',xe:'61C-909.09',phieu:'PC007',tuoi:'10100',drc:'31.5',kho:'3182'}
   ],
+  loTP:[
+    {lo:'TP-CB250502-1',ma_c:'CB250502',tp:'CSR 10',nguon:'Thu mua',ton:'5040',ngay:'2025-05-02'},
+    {lo:'TP-CB250502-2',ma_c:'CB250502',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-02'},
+    {lo:'TP-CB250502-3',ma_c:'CB250502',tp:'CSR 10',nguon:'Khai thác',ton:'3600',ngay:'2025-05-02'},
+    {lo:'TP-CB250501-1',ma_c:'CB250501',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-15'},
+    {lo:'TP-CB250501-2',ma_c:'CB250501',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-15'},
+    {lo:'TP-CB250501-3',ma_c:'CB250501',tp:'CSR 10',nguon:'Thu mua',ton:'1820',ngay:'2025-05-15'}
+  ],
   maB:[
     {ma_b:'B-250001-KT',khu:'Ô Tây Ninh Siêm Riệp 1 — mủ khai thác',nguon:'Khai thác',ton:'31500',kt:'31500',tm:'0'},
     {ma_b:'B-250002-TM',khu:'Ô BR — mủ thu mua (Best Royal)',nguon:'Thu mua',ton:'18000',kt:'0',tm:'18000'},
-    {ma_b:'B-250003-KT',khu:'Ô Tây Ninh Siêm Riệp 2 — mủ khai thác',nguon:'Khai thác',ton:'12500',kt:'12500',tm:'0'}
+    {ma_b:'B-250003-KT',khu:'Ô Tây Ninh Siêm Riệp 2 — mủ khai thác',nguon:'Khai thác',ton:'12500',kt:'12500',tm:'0'},
+    {ma_b:'B-250004-TM',khu:'Ô BR — mủ thu mua (Best Royal)',nguon:'Thu mua',ton:'9000',kt:'0',tm:'9000'}
   ]
 };
-const POOL_KEY = {maA:'ma_a', maB:'ma_b'};
+const POOL_KEY = {maA:'ma_a', maB:'ma_b', loTP:'lo'};
 const KG_BANH = 35, BANH_PALLET = 36, PALLET_LO = 4;
 const KG_LO = KG_BANH*BANH_PALLET*PALLET_LO;      // 5.040 kg
 const BANH_LO = BANH_PALLET*PALLET_LO;            // 144 bành
@@ -347,7 +375,11 @@ const FLOWS = [
               {k:'kho',l:'KL quy khô (kg)',type:'num',w:'120px',ro:1}],
         def:[POOL.maA[0],POOL.maA[1],POOL.maA[2]],
         foot:[{k:'ma_a',lbl:'Σ TỔNG CỘNG'},{k:'to',id:'b2_m_so',pre:'Số Mã A:',c:'amber'},
-              {k:'nguon',id:'b2_m_cocau',c:'green'},{k:'kho',id:'b2_m_kho',c:'teal'}]}},
+              {k:'kho',id:'b2_m_kho',c:'teal'}]}},
+      {title:'Cơ cấu nguồn của Mã B', fields:[
+        {id:'b2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'b2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]},
     ]},
   { code:'B-3', title:'Duyệt tạo Mã B', desc:'Chốt lô lưu trữ — sẵn sàng đưa vào chế biến',
     nguoi:'Phụ trách kho', sla:'1 ngày', duyet:'Trưởng phòng kế hoạch',
@@ -379,7 +411,8 @@ const FLOWS = [
       {title:'Tiêu chí lọc Mã B', fields:[
         {id:'c1_tu',label:'Ngày phân lô Mã B — từ',type:'date',dflt:'2025-05-10'},
         {id:'c1_den',label:'Ngày phân lô Mã B — đến',type:'date',dflt:'2025-05-14'},
-        {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,req:1,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Ô đã tách sẵn theo nguồn — chọn ô nào là lấy mủ nguồn đó'}
+        {m:['chung','tach'],id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,req:1,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Chọn nhiều ô — mẻ trộn được mủ của cả hai nguồn'},
+        {m:'don',id:'c1_khu',label:'Ô lưu trữ',type:'sel',opts:KHU_LUU,req:1,full:1,dflt:KHU_LUU[1],hint:'PA3: chọn đúng một ô — nguồn của mẻ suy từ ô này'}
       ]},
       {m:['chung','tach'],co:'info',t:'Mẻ trộn 2 nguồn',x:'Gom được Mã B khai thác lẫn thu mua. Nguyên liệu vào luôn ghi riêng từng nguồn theo Mã B.'},
       {m:'don',co:'info',t:'Mẻ 1 nguồn',x:'Chỉ chọn các ô lưu trữ <b>cùng một nguồn</b> — nguồn của mẻ suy ra từ ô. Không phải chia tỉ lệ, không phải nhập 2 số.'},
@@ -389,41 +422,43 @@ const FLOWS = [
     nguoi:'Giám sát chế biến', sla:'Ngay sau khi lọc', duyet:'—',
     body:[
       {title:'Lệnh chế biến', fields:[
-        {id:'c2_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro',hint:'Hệ thống sinh ở bước C-1'},
+        {id:'c2_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro'},
         {id:'c2_loai_tp',label:'Sản phẩm mục tiêu',type:'ro',inh:['2_0','c1_loai_tp'],inhLbl:'C-1'},
         {id:'c2_loai_mu',label:'Loại mủ',type:'ro',inh:['2_0','c1_loai_mu'],inhLbl:'C-1'},
         {id:'c2_ngay',label:'Ngày chế biến',type:'ro',inh:['2_0','c1_ngay'],inhLbl:'C-1'}
       ]},
       {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Danh sách Mã B chưa chế biến khớp tiêu chí ở C-1. Bấm × để bỏ, hoặc chọn thêm Mã B từ danh sách.'},
-      {m:'don',co:'info',t:'PA3 — chỉ một nguồn',x:'Danh sách chỉ gồm Mã B của nguồn đã chọn ở C-1.'},
-      {title:'Danh sách Mã B hệ thống trả về', table:{id:'c1_ma_b', add:'+ Thêm Mã B — chọn từ danh sách',
+      {m:'don',co:'info',t:'PA3 — chỉ một nguồn',x:'Danh sách chỉ gồm Mã B của ô lưu trữ đã chọn ở C-1, nên cả mẻ cùng một nguồn.'},
+      {title:'Danh sách Mã B hệ thống trả về', table:{id:'c1_ma_b', add:'+ Thêm Mã B — chọn từ danh sách', modeFilter:'nguon',
         cols:[{k:'ma_b',l:'Mã Lô Lưu trữ (Mã B)',w:'165px',pick:'maB'},{k:'khu',l:'Ô lưu trữ',type:'sel',opts:KHU_LUU,w:'220px',ro:1},
               {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'110px',ro:1},
               {k:'ton',l:'Tồn quy khô (kg)',type:'num',w:'120px',ro:1},
               {k:'cb',l:'Chỉ định CB',w:'110px',calc:1},
               {k:'lay',l:'KL đem chế biến (kg)',type:'num',w:'130px',calc:1},
-              {k:'kt',l:'Trong đó khai thác',type:'num',w:'120px',ro:1},
-              {k:'tm',l:'Trong đó thu mua',type:'num',w:'120px',ro:1}],
+              ],
         def:[{ma_b:'B-250001-KT',khu:KHU_LUU[1],nguon:'Khai thác',ton:'31500',cb:'CB',lay:'31500',kt:'31500',tm:'0'},
              {ma_b:'B-250002-TM',khu:KHU_LUU[0],nguon:'Thu mua',ton:'18000',cb:'CB10000',lay:'10000',kt:'0',tm:'10000'}],
-        foot:[{k:'ma_b',lbl:'Σ TỔNG CỘNG'},{k:'nguon',id:'c1_m_cocau',c:'green'},
-              {k:'ton',id:'c1_m_ton',c:'amber'},{k:'lay',id:'c1_m_vao',c:'teal'},
-              {k:'kt',id:'c1_m_kt',c:'blue'},{k:'tm',id:'c1_m_tm',c:'green'}]}},
+        defBy:{don:[{ma_b:'B-250001-KT',khu:KHU_LUU[1],nguon:'Khai thác',ton:'31500',cb:'CB',lay:'31500',kt:'31500',tm:'0'},
+                    {ma_b:'B-250003-KT',khu:KHU_LUU[2],nguon:'Khai thác',ton:'12500',cb:'CB5000',lay:'5000',kt:'5000',tm:'0'},
+                    {ma_b:'B-250002-TM',khu:KHU_LUU[0],nguon:'Thu mua',ton:'18000',cb:'CB',lay:'18000',kt:'0',tm:'18000'},
+                    {ma_b:'B-250004-TM',khu:KHU_LUU[0],nguon:'Thu mua',ton:'9000',cb:'CB',lay:'9000',kt:'0',tm:'9000'}]},
+        foot:[{k:'ma_b',lbl:'Σ TỔNG CỘNG'},
+              {k:'ton',id:'c1_m_ton',c:'amber'},{k:'lay',id:'c1_m_vao',c:'teal'}]}},
+      {title:'Cơ cấu nguyên liệu đưa vào chế biến', fields:[
+        {id:'c2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'c2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]},
       {co:'info',t:'Chỉ định CB',x:'<b>CB</b> = 100% tồn · <b>CBxxx</b> = xxx kg · <b>CBxx%</b> = xx% tồn. Cột KL tự điền theo.'}
     ]},
-  { code:'C-3', title:'Vận chuyển bãi ủ → kho nhà máy', desc:'Xuất bãi ủ lấy từ app Nghĩa · người vận hành điền phần nhập nhà máy',
+  { code:'C-3', title:'Vận chuyển bãi ủ → kho nhà máy', desc:'Toàn bộ tính theo khối lượng quy khô',
     nguoi:'App DRC (Nghĩa) + kho nhà máy', sla:'Trong ngày vận chuyển', duyet:'—',
     body:[
       {title:'Xuất kho bãi ủ — lấy từ app của Nghĩa', fields:[
         {id:'c3_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro',full:1,inh:['2_1','c2_ma_c'],inhLbl:'C-2'},
-        {id:'c2_x_tuoi',label:'KL mủ tươi xuất bãi ủ (kg)',type:'ro',dflt:'130000',hint:'Đồng bộ từ app của Nghĩa'},
-        {id:'c2_x_drc',label:'DRC tại bãi ủ (%)',type:'ro',dflt:'31.9',hint:'Đồng bộ từ app của Nghĩa'},
-        {id:'c2_x_kho',label:'KL quy khô xuất (kg)',type:'ro'}
+        {id:'c2_x_kho',label:'KL quy khô xuất bãi ủ (kg)',type:'ro',src:'app',full:1,dflt:'41470',calc:1,hint:'Đồng bộ từ app của Nghĩa'}
       ]},
       {title:'Nhập kho nhà máy — người vận hành điền', fields:[
-        {id:'c2_n_tuoi',label:'KL mủ tươi thực nhận (kg)',type:'num',calc:1,req:1,dflt:'129500'},
-        {id:'c2_n_drc',label:'DRC đo nhanh tại nhà máy (%)',type:'num',calc:1,req:1,dflt:'31.9'},
-        {id:'c2_n_kho',label:'KL quy khô nhận (kg)',type:'ro'}
+        {id:'c2_n_kho',label:'KL quy khô thực nhận (kg)',type:'num',calc:1,req:1,full:1,dflt:'41310.5'}
       ]},
       {title:'Đối chiếu hao hụt vận chuyển — hệ thống tự tính', fields:[
         {id:'c2_hao',label:'Hao hụt vận chuyển (kg quy khô)',type:'ro'},
@@ -440,15 +475,16 @@ const FLOWS = [
         {id:'c4_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro',ph:'CB250501',inh:['2_1','c2_ma_c'],inhLbl:'C-2'},
         {id:'c3_sp_tt',label:'Sản phẩm thực tế',type:'sel',opts:LOAI_TP,inh:['2_0','c1_loai_tp'],inhLbl:'C-1 · sản phẩm mục tiêu',hint:'Sửa lại nếu phân loại lại sau kiểm tra chất lượng'},
         {m:'don',id:'c3_nguon',label:'Nguồn của mẻ',type:'ro',hint:'Suy từ ô lưu trữ đã chọn ở C-1'},
-        {m:'don',id:'c3_vao',label:'KL nguyên liệu đầu vào (kg quy khô)',type:'ro',dflt:'31500',hint:'Tự lấy từ bước C-2'},
+        {m:'don',id:'c3_vao',label:'KL nguyên liệu đầu vào (kg quy khô)',type:'ro',src:'inh',dflt:'31500'},
         {m:'don',id:'c3_tp',label:'KL thành phẩm (kg)',type:'num',calc:1,req:1,dflt:'35400',hint:'Một con số — cả mẻ một nguồn'},
         {m:'don',id:'c3_sai_lech',label:'Sai lệch so với nguyên liệu (kg)',type:'ro',full:1}
       ]},
       {m:'chung',title:'Nguyên liệu đầu vào — ghi riêng theo nguồn (từ C-2)', fields:[
-        {id:'c3_vao_kt',label:'KL vào — khai thác (kg)',type:'ro',dflt:'31500'},
-        {id:'c3_vao_tm',label:'KL vào — thu mua (kg)',type:'ro',dflt:'10000'},
-        {id:'c3_vao',label:'Tổng KL nguyên liệu vào (kg)',type:'ro',dflt:'41500'},
-        {id:'c3_ty_le',label:'Tỉ lệ cơ cấu đầu vào',type:'ro',hint:'Dùng để chia thành phẩm'}
+        {id:'c3_vao_kt',label:'KL vào — khai thác (kg)',type:'ro',src:'inh',dflt:'31500'},
+        {id:'c3_vao_tm',label:'KL vào — thu mua (kg)',type:'ro',src:'inh',dflt:'10000'},
+        {id:'c3_vao',label:'Tổng KL nguyên liệu vào (kg)',type:'ro',src:'inh',dflt:'41500'},
+        {id:'c3_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro',src:'inh'},
+        {id:'c3_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro',src:'inh'}
       ]},
       {m:'chung',title:'Thành phẩm ra — nhập 1 số tổng', fields:[
         {id:'c3_tp',label:'Tổng KL thành phẩm (kg)',type:'num',calc:1,req:1,hint:'Chỉ nhập một con số tổng',dflt:'46800'},
@@ -457,12 +493,12 @@ const FLOWS = [
         {id:'c3_tp_tm',label:'KL thành phẩm — thu mua (kg)',type:'ro',hint:'Máy chia theo tỉ lệ đầu vào'}
       ]},
       {m:'tach',title:'Luồng KHAI THÁC', fields:[
-        {id:'c3_vao_kt',label:'KL nguyên liệu vào — khai thác (kg)',type:'ro',dflt:'31500',hint:'Tự lấy từ bước C-2'},
+        {id:'c3_vao_kt',label:'KL nguyên liệu vào — khai thác (kg)',type:'ro',src:'inh',dflt:'31500'},
         {id:'c3_tp_kt',label:'KL thành phẩm — khai thác (kg)',type:'num',calc:1,req:1,dflt:'35400',hint:'Ghi chép thực tế tại xưởng'},
         {id:'c3_lech_kt',label:'Sai lệch — khai thác (kg)',type:'ro',full:1}
       ]},
       {m:'tach',title:'Luồng THU MUA', fields:[
-        {id:'c3_vao_tm',label:'KL nguyên liệu vào — thu mua (kg)',type:'ro',dflt:'10000',hint:'Tự lấy từ bước C-2'},
+        {id:'c3_vao_tm',label:'KL nguyên liệu vào — thu mua (kg)',type:'ro',src:'inh',dflt:'10000'},
         {id:'c3_tp_tm',label:'KL thành phẩm — thu mua (kg)',type:'num',calc:1,req:1,dflt:'11400',hint:'Ghi chép thực tế tại xưởng'},
         {id:'c3_lech_tm',label:'Sai lệch — thu mua (kg)',type:'ro',full:1}
       ]},
@@ -497,24 +533,26 @@ const FLOWS = [
   { code:'C-6', title:'Cân bằng khối lượng', desc:'Xử lý sai lệch trước khi cho nhập kho',
     nguoi:'Người phụ trách cân bằng', sla:'Ngay sau mỗi đợt chế biến', duyet:'—',
     body:[
+      {m:'chung',co:'info',t:'PA1 — cân bằng theo tỉ lệ',x:'Phần cộng vào nguyên liệu đầu vào được chia theo <b>tỉ lệ cơ cấu KT / TM</b> của mẻ.'},
+      {m:'tach',co:'info',t:'PA2 — cân bằng ghi riêng',x:'Cân bằng khối lượng <b>ghi riêng cho khai thác và thu mua</b>, mỗi luồng một con số.'},
       {co:'danger',t:'Xử lý sai lệch',x:'<b>Dư</b> → tự cộng ngược vào nguyên liệu đầu vào cho hiệu = 0. <b>Hụt</b> → không trừ nguyên liệu, bắt buộc giải trình.'},
       {co:'info',t:'Ai thực hiện cân bằng',x:'Phiếu chỉ ghi nhận sai lệch và giải trình. Việc cộng ngược vào nguyên liệu và sinh Mã B điều chỉnh do <b>luồng n8n chạy trên bảng dữ liệu sau khi C-7 được duyệt</b>.'},
       {m:['chung','don'],title:'Số liệu cân bằng — cả mẻ', fields:[
-        {id:'c5_vao',label:'KL nguyên liệu đầu vào (kg)',type:'num',calc:1},
-        {id:'c5_tp',label:'KL thành phẩm (kg)',type:'num',calc:1},
+        {id:'c5_vao',label:'KL nguyên liệu đầu vào (kg)',type:'ro',src:'inh',dflt:'41500'},
+        {id:'c5_tp',label:'KL thành phẩm (kg)',type:'ro',src:'inh',dflt:'46800'},
         {id:'c5_lech',label:'Sai lệch (kg)',type:'ro'},
         {id:'c5_huong',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1,hint:'Hệ thống gợi ý theo dấu của sai lệch — người duyệt chọn lại nếu cần'}
       ]},
       {m:'tach',title:'Cân bằng luồng KHAI THÁC', fields:[
-        {id:'c5_vao_kt',label:'KL nguyên liệu vào (kg)',type:'ro'},
-        {id:'c5_tp_kt',label:'KL thành phẩm (kg)',type:'ro'},
+        {id:'c5_vao_kt',label:'KL nguyên liệu vào (kg)',type:'ro',src:'inh'},
+        {id:'c5_tp_kt',label:'KL thành phẩm (kg)',type:'ro',src:'inh'},
         {id:'c5_lech_kt',label:'Sai lệch (kg)',type:'ro'},
         {id:'c5_huong_kt',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1},
         {id:'c5_giai_trinh_kt',label:'Giải trình hao hụt luồng khai thác',type:'area',full:1,ph:'Bắt buộc khi hiệu âm…'}
       ]},
       {m:'tach',title:'Cân bằng luồng THU MUA', fields:[
-        {id:'c5_vao_tm',label:'KL nguyên liệu vào (kg)',type:'ro'},
-        {id:'c5_tp_tm',label:'KL thành phẩm (kg)',type:'ro'},
+        {id:'c5_vao_tm',label:'KL nguyên liệu vào (kg)',type:'ro',src:'inh'},
+        {id:'c5_tp_tm',label:'KL thành phẩm (kg)',type:'ro',src:'inh'},
         {id:'c5_lech_tm',label:'Sai lệch (kg)',type:'ro'},
         {id:'c5_huong_tm',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1},
         {id:'c5_giai_trinh_tm',label:'Giải trình hao hụt luồng thu mua',type:'area',full:1,ph:'Bắt buộc khi hiệu âm…'}
@@ -575,8 +613,12 @@ const FLOWS = [
               {k:'tp',l:'Mã sản phẩm',type:'sel',opts:LOAI_TP,w:'150px',ro:1}],
         def:[],
         foot:[{k:'lo',lbl:'Σ TỔNG NHẬP'},{k:'pallet',id:'d1_m_lo',pre:'Số lô:',c:'amber'},
-              {k:'banh',id:'d1_m_banh',c:'blue'},{k:'kl',id:'d1_m_kl',c:'teal'},
-              {k:'nguon',id:'d1_m_cocau',c:'green'}]}}
+              {k:'banh',id:'d1_m_banh',c:'blue'},
+              {k:'kl',id:'d1_m_kl',c:'teal'}]}},
+      {title:'Cơ cấu nguồn của lô nhập kho', fields:[
+        {id:'d2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'d2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]}
     ]},
   { code:'D-3', title:'Duyệt nhập kho', desc:'Duyệt xong mới ghi tồn kho thành phẩm',
     nguoi:'Thủ kho trình ký', sla:'1 ngày', duyet:'Thủ trưởng đơn vị',
@@ -593,19 +635,19 @@ const FLOWS = [
   badge:'Truy xuất nguồn gốc cao su · Tây Ninh Siêm Riệp PTCS',
   sub:'Đơn hàng / Hợp đồng → Lệnh xuất hàng → Chọn lô thành phẩm → Ghi nhận xuất kho → Duyệt',
   steps:[
-  { code:'X-1', title:'Đơn hàng / Hợp đồng', desc:'Quy trình bán hàng đã có sẵn trên Base',
-    nguoi:'Kinh doanh', sla:'Theo đơn hàng', duyet:'—',
+  { code:'X-1', title:'Đơn hàng / Hợp đồng', desc:'Kế thừa từ quy trình Bán hàng tổng hợp đã có trên Base',
+    nguoi:'Kinh doanh (QT Bán hàng)', sla:'Theo đơn hàng', duyet:'—',
     body:[
-      {title:'Thông tin đơn hàng', fields:[
-        {id:'x1_ma_dh',label:'Mã đơn hàng',type:'text',req:1,dflt:'DH-2025-042'},
-        {id:'x1_so_hd',label:'Số hợp đồng',type:'text',req:1,hint:'Số không trùng — dùng để tra cứu truy xuất',dflt:'HĐ-2025-018/TNSR'},
-        {id:'x1_kh',label:'Khách hàng',type:'text',req:1,dflt:'Công ty TNHH Cao su Phương Đông'},
-        {id:'x1_tp',label:'Loại sản phẩm',type:'sel',opts:LOAI_TP,req:1},
-        {id:'x1_kl',label:'Khối lượng yêu cầu (kg)',type:'num',req:1,calc:1,dflt:'100000'},
-        {id:'x1_ngay_giao',label:'Ngày giao',type:'date',req:1,dflt:'2025-05-25'},
-        {id:'x1_tt',label:'Trạng thái đơn hàng',type:'sel',opts:['Mới','Đủ điều kiện xử lý','Đang giao','Hoàn thành','Huỷ']}
+      {title:'Thông tin đơn hàng — kế thừa từ quy trình Bán hàng', fields:[
+        {id:'x1_ma_dh',label:'Mã đơn hàng',type:'ro',src:'inh',dflt:'DH-2025-042'},
+        {id:'x1_so_hd',label:'Số hợp đồng',type:'ro',src:'inh',dflt:'HĐ-2025-018/TNSR',hint:'Số không trùng — dùng để tra cứu truy xuất'},
+        {id:'x1_kh',label:'Khách hàng',type:'ro',src:'inh',dflt:'Công ty TNHH Cao su Phương Đông'},
+        {id:'x1_tp',label:'Loại sản phẩm',type:'ro',src:'inh',dflt:'CSR 10'},
+        {id:'x1_kl',label:'Khối lượng yêu cầu (kg)',type:'ro',src:'inh',calc:1,dflt:'100000'},
+        {id:'x1_ngay_giao',label:'Ngày giao',type:'ro',src:'inh',dflt:'2025-05-25'},
+        {id:'x1_tt',label:'Trạng thái đơn hàng',type:'ro',src:'inh',dflt:'Đủ điều kiện xử lý'}
       ]},
-      {co:'info',t:'Điều kiện sang bước sau',x:'Đơn hàng đủ điều kiện xử lý mới tạo được <b>Lệnh xuất hàng</b>.'}
+      {co:'info',t:'Không nhập lại ở đây',x:'Toàn bộ thông tin kế thừa từ <b>quy trình Bán hàng tổng hợp</b> đã có trên Base. Đơn hàng đủ điều kiện xử lý mới tạo được <b>Lệnh xuất hàng</b>.'}
     ]},
   { code:'X-2', title:'Lệnh xuất hàng', desc:'Cầu nối giữa bán hàng và xuất kho',
     nguoi:'Kinh doanh · Kế hoạch', sla:'Sau khi chốt đơn', duyet:'—',
@@ -620,30 +662,32 @@ const FLOWS = [
         {id:'x2_ngay',label:'Ngày dự kiến xuất',type:'date',calc:1,dflt:'2025-05-23'},
         {id:'x2_tt',label:'Trạng thái',type:'sel',opts:['Chờ xuất kho','Đang xuất kho','Đã xuất kho']},
         {id:'x2_uu_tien',label:'Ưu tiên nguồn khi lấy hàng',type:'sel',calc:1,full:1,
-          opts:['Thu mua trước — hết mới lấy khai thác','Khai thác trước','Không ưu tiên'],
+          opts:['Thu mua trước — hết mới lấy khai thác','Khai thác trước','FIFO — first in first out'],
           hint:'Thực tế: xuất hết thu mua rồi mới tới khai thác, trong từng nhóm vẫn FIFO'}
       ]}
     ]},
   { code:'X-3', title:'Chọn thành phẩm để xuất kho', desc:'Hệ thống trả danh sách đã sắp xếp — người dùng chỉnh lại',
     nguoi:'Thủ kho thành phẩm', sla:'Trong ngày', duyet:'—',
     body:[
-      {co:'auto',t:'Danh sách đã sắp theo FIFO + ưu tiên nguồn',x:'KL xuất mặc định bằng KL tồn của từng lô — người thao tác chỉnh lại theo nhu cầu, bỏ tick lô không lấy.'},
-      {title:'Tồn kho theo lô thành phẩm', table:{id:'x3_ton', add:'+ Thêm lô tồn kho',
-        cols:[{k:'chon',l:'Xuất',type:'check',w:'54px',calc:1},
-              {k:'lo',l:'Mã lô',w:'150px',ro:1},{k:'ma_c',l:'Mã C',w:'110px',ro:1},
+      {co:'auto',t:'Danh sách đã sắp theo FIFO + ưu tiên nguồn',x:'KL xuất mặc định bằng KL tồn của từng lô — chỉnh lại theo nhu cầu, bấm × để bỏ lô, hoặc chọn thêm mã lô từ danh sách.'},
+      {title:'Tồn kho theo lô thành phẩm', table:{id:'x3_ton', add:'+ Thêm mã lô — chọn từ danh sách',
+        cols:[{k:'lo',l:'Mã lô',w:'185px',pick:'loTP'},{k:'ma_c',l:'Mã C',w:'110px',ro:1},
               {k:'tp',l:'Loại sản phẩm',type:'sel',opts:LOAI_TP,w:'140px',ro:1},
               {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'115px',ro:1},
               {k:'ton',l:'KL tồn (kg)',type:'num',w:'105px',ro:1},
               {k:'ngay',l:'Ngày nhập kho',type:'date',w:'130px',ro:1},
               {k:'kl',l:'KL xuất (kg)',type:'num',w:'110px',calc:1}],
-        def:[{chon:true,lo:'TP-CB250502-1',ma_c:'CB250502',tp:LOAI_TP[0],nguon:'Thu mua',ton:'5040',ngay:'2025-05-02',kl:'5040'},
-             {chon:true,lo:'TP-CB250501-3',ma_c:'CB250501',tp:LOAI_TP[0],nguon:'Thu mua',ton:'1820',ngay:'2025-05-15',kl:'1820'},
-             {chon:true,lo:'TP-CB250502-2',ma_c:'CB250502',tp:LOAI_TP[0],nguon:'Khai thác',ton:'5040',ngay:'2025-05-02',kl:'5040'},
-             {chon:true,lo:'TP-CB250501-1',ma_c:'CB250501',tp:LOAI_TP[0],nguon:'Khai thác',ton:'5040',ngay:'2025-05-15',kl:'5040'}],
-        foot:[{k:'lo',lbl:'Σ ĐÃ CHỌN'},{k:'tp',id:'x3_m_can',pre:'Cần xuất:',c:'blue'},
-              {k:'nguon',id:'x3_m_nguon',c:'green'},{k:'ton',id:'x3_m_ton',c:'amber'},
+        def:[{lo:'TP-CB250502-1',ma_c:'CB250502',tp:'CSR 10',nguon:'Thu mua',ton:'5040',ngay:'2025-05-02',kl:'5040'},
+             {lo:'TP-CB250501-3',ma_c:'CB250501',tp:'CSR 10',nguon:'Thu mua',ton:'1820',ngay:'2025-05-15',kl:'1820'},
+             {lo:'TP-CB250502-2',ma_c:'CB250502',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-02',kl:'5040'},
+             {lo:'TP-CB250501-1',ma_c:'CB250501',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-15',kl:'5040'}],
+        foot:[{k:'lo',lbl:'Σ ĐÃ CHỌN'},{k:'ma_c',id:'x3_m_can',pre:'Cần:',c:'blue'},
+              {k:'ton',id:'x3_m_ton',c:'amber'},
               {k:'kl',id:'x3_m_chon',c:'teal'},{k:'ngay',id:'x3_m_thieu',pre:'Thiếu/dư:',c:'red'}]}},
-      {btn:{id:'btn-fifo',label:'⚡ Sắp lại theo FIFO + phân bổ đúng khối lượng cần xuất',fn:'autoFIFO()'}},
+      {title:'Cơ cấu nguồn của lô đã chọn', fields:[
+        {id:'x3_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'x3_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]},
       {co:'warn',t:'Quản lý tới mã lô',x:'Không xuất kho ở cấp Mã C: một Mã C tạo nhiều lô, mỗi lần xuất có thể chỉ xuất một phần.'}
     ]},
   { code:'X-4', title:'Ghi nhận xuất kho', desc:'Lập phiếu xuất kho thành phẩm',
@@ -655,7 +699,8 @@ const FLOWS = [
         {id:'x4_ma_dh',label:'Mã đơn hàng',type:'ro',inh:['4_0','x1_ma_dh'],inhLbl:'X-1'},
         {id:'x4_kh',label:'Khách hàng',type:'ro',inh:['4_0','x1_kh'],inhLbl:'X-1'},
         {id:'x4_tp',label:'Loại thành phẩm',type:'ro',inh:['4_0','x1_tp'],inhLbl:'X-1'},
-        {id:'x4_nguon',label:'Nguồn (thu mua / khai thác)',type:'ro',hint:'Tổng hợp từ các lô đã chọn ở X-3'},
+        {id:'x4_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'x4_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'},
         {id:'x4_kl',label:'Khối lượng xuất (kg)',type:'ro'},
         {id:'x4_ngay',label:'Ngày xuất',type:'date',req:1,dflt:'2025-05-23'},
         {id:'x4_nguoi',label:'Người lập phiếu',type:'text',dflt:'Vũ Thị E — thủ kho thành phẩm'}
@@ -665,7 +710,7 @@ const FLOWS = [
               {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'115px',ro:1},
               {k:'kl',l:'KL xuất (kg)',type:'num',w:'120px',calc:1}],
         def:[],
-        foot:[{k:'lo',lbl:'Σ TỔNG XUẤT'},{k:'nguon',id:'x4_m_nguon',c:'green'},{k:'kl',id:'x4_m_kl',c:'teal'}]}}
+        foot:[{k:'lo',lbl:'Σ TỔNG XUẤT'},{k:'kl',id:'x4_m_kl',c:'teal'}]}}
     ]},
   { code:'X-5', title:'Duyệt xuất kho', desc:'Duyệt xong mới được xuất hàng và trừ tồn',
     nguoi:'Thủ kho trình ký', sla:'1 ngày', duyet:'Thủ trưởng đơn vị',
@@ -687,7 +732,7 @@ const FLOWS = [
    ============================================================ */
 function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
 // Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
-const STORE_VER='v30';
+const STORE_VER='v48';
 try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
 
 let MODE = ss('cs_mode')||'chung';          // 'chung' = gộp chung · 'tach' = tách 2 luồng
@@ -718,12 +763,41 @@ function setM(id,val,sub){ const e=document.getElementById(id); if(e) e.innerHTM
 /* ============================================================
    RENDER — FIELD / TABLE / SECTION
    ============================================================ */
+function toggleMdd(id){
+  const pan=document.getElementById('mddpan_'+id); if(!pan) return;
+  const open=pan.classList.toggle('open');
+  document.querySelectorAll('.mdd-panel.open').forEach(function(p){ if(p!==pan) p.classList.remove('open'); });
+  if(open){ setTimeout(function(){
+    document.addEventListener('click', function close(e){
+      if(!e.target.closest('#mdd_'+id)){ pan.classList.remove('open'); document.removeEventListener('click',close); }
+    });
+  },0); }
+}
+
 function syncMulti(el,id){
-  el.closest('.mchk').classList.toggle('on',el.checked);
-  const box=el.closest('.multi');
+  el.closest('.mdd-opt').classList.toggle('on',el.checked);
+  const box=el.closest('.mdd-panel');
   const vals=Array.from(box.querySelectorAll('input[type=checkbox]')).filter(function(c){return c.checked;}).map(function(c){return c.dataset.v;});
   const h=document.getElementById(id); if(h) h.value=vals.join(' · ');
+  const lb=document.getElementById('mddlbl_'+id);
+  if(lb) lb.textContent = vals.length? (vals.length===1? vals[0] : vals.length+' ô đã chọn') : '— chọn ô —';
   recalc();
+}
+
+// PA3: nguồn của mẻ suy từ ô lưu trữ chọn ở C-1
+function nguonMe(){
+  const khu=String((state['2_0']||{}).c1_khu||'');
+  if(!khu) return '';
+  return (khu.indexOf('Ô BR')>=0 && khu.indexOf('Tây Ninh')<0) ? 'Thu mua' : 'Khai thác';
+}
+
+// phân loại trường: điền tay · kế thừa · tự tính · đồng bộ app
+function fieldKind(f){
+  if(f.src==='app') return {cls:'fk-app', tag:'<span class="fk-tag t-app">⇄ App Nghĩa</span>'};
+  // sửa được thì vẫn là trường điền, dù có giá trị mặc định kế thừa
+  if(f.type!=='ro') return {cls:'fk-fill', tag:'<span class="fk-tag t-fill">✎ Điền</span>'};
+  if(f.inh || f.src==='inh') return {cls:'fk-inh', tag:'<span class="fk-tag t-inh">↩ Kế thừa</span>'};
+  return {cls:'fk-auto',tag:'<span class="fk-tag t-auto">⚙ Tự tính</span>'};
 }
 
 function inhVal(f){ if(!f.inh) return ''; const s=state[f.inh[0]]||{}; const v=s[f.inh[1]]; return (v===undefined||v===null)?'':v; }
@@ -734,18 +808,25 @@ function fieldHTML(f,d){
   if(v==='' && f.inh){ const iv=inhVal(f); if(iv!==''){ v=iv; inherited=true; } }
   if(v==='' && f.dflt!==undefined) v=f.dflt;
   const dm = f.m? ' dm dm-'+(Array.isArray(f.m)? 'multi' : f.m) : '';
-  const cls = 'fgrp'+(f.full?' full':'')+dm;
-  const lab = '<label class="'+(f.req?'req':'')+'">'+esc(f.label)+(f.m?'<span class="dif-tag">'+(Array.isArray(f.m)? f.m.map(function(x){return x==='chung'?'PA1':x==='tach'?'PA2':'PA3';}).join('/') : (f.m==='chung'?'PA1':f.m==='tach'?'PA2':'PA3'))+'</span>':'')+'</label>';
-  const hint = (f.hint||inherited)?'<div class="fhint">'+(inherited?'<span class="inh-tag">↩ mặc định theo '+esc(f.inhLbl||'bước trước')+'</span> ':'')+(f.hint||'')+'</div>':'';
+  const kind = fieldKind(f);
+  const cls = 'fgrp'+(f.full?' full':'')+dm+' '+kind.cls;
+  const lab = '<label class="'+(f.req?'req':'')+'">'+esc(f.label)+kind.tag+(f.m?'<span class="dif-tag">'+(Array.isArray(f.m)? f.m.map(function(x){return x==='chung'?'PA1':x==='tach'?'PA2':'PA3';}).join('/') : (f.m==='chung'?'PA1':f.m==='tach'?'PA2':'PA3'))+'</span>':'')+'</label>';
+  const hint = f.hint?'<div class="fhint">'+f.hint+'</div>':'';
   const oi = f.calc?' oninput="recalc()" onchange="recalc()"':'';
   let inp='';
   if(f.type==='multi'){
     const cur=String(v||'').split(' · ').filter(Boolean);
-    inp='<div class="multi">'+f.opts.map(function(o){
-      return '<label class="mchk'+(cur.indexOf(o)>=0?' on':'')+'"><input type="checkbox" data-v="'+esc(o)+'" '+(cur.indexOf(o)>=0?'checked':'')
-        +' onchange="syncMulti(this,\''+f.id+'\')"/>'+esc(o)+'</label>';
-    }).join('')+'</div><input type="hidden" id="'+f.id+'" value="'+esc(v)+'"/>';
+    const lbl = cur.length? (cur.length===1? cur[0] : cur.length+' ô đã chọn') : '— chọn ô —';
+    inp='<div class="mdd" id="mdd_'+f.id+'">'
+      +'<button type="button" class="mdd-btn" onclick="toggleMdd(\''+f.id+'\')"><span id="mddlbl_'+f.id+'">'+esc(lbl)+'</span><span class="mdd-ar">▾</span></button>'
+      +'<div class="mdd-panel" id="mddpan_'+f.id+'">'
+      +f.opts.map(function(o){
+        return '<label class="mdd-opt'+(cur.indexOf(o)>=0?' on':'')+'"><input type="checkbox" data-v="'+esc(o)+'" '+(cur.indexOf(o)>=0?'checked':'')
+          +' onchange="syncMulti(this,\''+f.id+'\')"/>'+esc(o)+'</label>';
+      }).join('')
+      +'</div><input type="hidden" id="'+f.id+'" value="'+esc(v)+'"/></div>';
   } else if(f.type==='sel'){
+    if(f.opts.indexOf(v)<0) v = (f.dflt!==undefined && f.opts.indexOf(f.dflt)>=0)? f.dflt : f.opts[0];
     inp='<select id="'+f.id+'"'+oi+'>'+f.opts.map(o=>'<option'+(v===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
   } else if(f.type==='area'){
     inp='<textarea id="'+f.id+'" placeholder="'+esc(f.ph||'')+'">'+esc(v)+'</textarea>';
@@ -767,7 +848,11 @@ function cellHTML(c,row){
   const v = row[c.k]!==undefined?row[c.k]:'';
   const oi = c.calc?' oninput="recalc()" onchange="recalc()"':'';
   if(c.pick){
-    const list=POOL[c.pick]||[], k=POOL_KEY[c.pick];
+    let list=POOL[c.pick]||[]; const k=POOL_KEY[c.pick];
+    if(c.pick==='maB' && MODE==='don'){
+      const ng=nguonMe();
+      if(ng) list=list.filter(function(r){return r.nguon===ng;});
+    }
     let opts='<option value="">— chọn —</option>';
     if(v && !list.some(function(r){return r[k]===v;})) opts+='<option selected>'+esc(v)+'</option>';
     opts+=list.map(function(r){return '<option'+(r[k]===v?' selected':'')+'>'+esc(r[k])+'</option>';}).join('');
@@ -788,15 +873,25 @@ function rowHTML(t,row){
 
 function tableHTML(t,d){
   let rows = d[t.id]!==undefined ? d[t.id] : null;
+  if(rows===null && t.defBy && t.defBy[MODE]) rows=t.defBy[MODE];
   if(rows===null && t.inh){ const src=(state[t.inh[0]]||{})[t.inh[1]]; if(src && src.length) rows=src; }
   if(rows===null) rows = t.def||[];
+  if(MODE==='don' && t.modeFilter==='nguon'){
+    const ng=nguonMe();
+    if(ng){
+      let ok=rows.filter(function(r){ return !r.nguon || r.nguon===ng; });
+      if(!ok.length && t.defBy && t.defBy.don) ok=t.defBy.don.filter(function(r){ return !r.nguon || r.nguon===ng; });
+      rows=ok;
+    }
+  }
   let foot='';
   if(t.foot){
     foot='<tfoot><tr>'+colsOf(t).map(c=>{
       const f=t.foot.find(x=>x.k===c.k);
       if(!f) return '<td class="tf"></td>';
       if(f.lbl) return '<td class="tf tf-lbl">'+esc(f.lbl)+'</td>';
-      return '<td class="tf tv-'+(f.c||'blue')+'">'+(f.pre?'<span class="tf-pre">'+esc(f.pre)+'</span>':'')+'<span id="'+f.id+'">—</span></td>';
+      const al=(c.type==='num')?' num-right':'';
+      return '<td class="tf'+al+' tv-'+(f.c||'blue')+'">'+(f.pre?'<span class="tf-pre">'+esc(f.pre)+'</span>':'')+'<span id="'+f.id+'">—</span></td>';
     }).join('')+'<td class="tf"></td></tr></tfoot>';
   }
   return '<div class="tw"><table><thead><tr>'+colsOf(t).map(c=>'<th'+(c.m?' class="dmc"':'')+(c.w?' style="width:'+c.w+'"':'')+'>'+esc(c.l)+'</th>').join('')
@@ -807,7 +902,7 @@ function tableHTML(t,d){
 function blockHTML(b,d){
   if(!inMode(b)) return '';
   if(b.co) return '<div class="callout co-'+b.co+'"><span class="co-t">'+b.t
-      +(b.m?'<span class="dif-tag">KHÁC GIỮA 2 PHƯƠNG ÁN</span>':'')+'</span>'+b.x+'</div>';
+      +(b.m?'<span class="dif-tag">KHÁC GIỮA CÁC PHƯƠNG ÁN</span>':'')+'</span>'+b.x+'</div>';
   if(b.chain) return chainHTML();
   if(b.btn) return '<div style="margin:10px 0"><button class="btn btn-p'+cf+'" id="'+b.btn.id+'" onclick="'+b.btn.fn+'">'+b.btn.label+'</button></div>';
   if(b.metrics){ const ms=b.metrics.filter(inMode);
@@ -898,7 +993,12 @@ function renderMode(){
 
 function setMode(m){
   if(MODE===m) return;
-  saveForm(); MODE=m; save();
+  saveForm(); MODE=m;
+  // bảng nào phụ thuộc phương án thì nạp lại dữ liệu chuẩn của phương án mới
+  FLOWS.forEach(function(fl,fi){ fl.steps.forEach(function(st,si){ st.body.forEach(function(b){
+    if(b.table && (b.table.defBy||b.table.modeFilter) && state[fi+'_'+si]) delete state[fi+'_'+si][b.table.id];
+  }); }); });
+  save();
   if(cf===-1) goOverview(); else if(cf===-3) goCompare(); else renderAll();
   renderMode();
 }
@@ -1027,7 +1127,7 @@ function calcB2(){
   rows.forEach(r=>{ const k=n(r.kho); kho+=k; if(r.nguon===NGUON[1]) tm+=k; else kt+=k; });
   setM('b2_m_so',rows.length);
   setM('b2_m_kho',fmt(kho));
-  setM('b2_m_cocau', kho? 'KT '+fmt(kt/kho*100)+'% · TM '+fmt(tm/kho*100)+'%' : '—');
+  setRO('b2_tl_kt', kho? fmt(kt/kho*100)+' %' : ''); setRO('b2_tl_tm', kho? fmt(tm/kho*100)+' %' : '');
   state['1_1']=Object.assign({},state['1_1'],{_kho:kho,_kt:kt,_tm:tm});
 }
 
@@ -1052,35 +1152,24 @@ function calcC2(){
       const el=cellEl('c1_ma_b',i,'lay'); if(el && lay) el.value=Math.round(lay*100)/100;
     }
     vao+=lay;
-    // cơ cấu KT/TM của Mã B → phân bổ theo phần đem chế biến
+    // cơ cấu KT/TM suy từ nguồn của Mã B
     const src=(POOL.maB||[]).filter(function(x){return x.ma_b===r.ma_b;})[0];
-    let rkt=n(r.kt), rtm=n(r.tm);
-    if(src){
-      const t=n(src.kt)+n(src.tm);
-      if(t>0){ rkt=lay*n(src.kt)/t; rtm=lay*n(src.tm)/t;
-        const ek=cellEl('c1_ma_b',i,'kt'); if(ek) ek.value=Math.round(rkt*100)/100;
-        const em=cellEl('c1_ma_b',i,'tm'); if(em) em.value=Math.round(rtm*100)/100;
-      }
-    }
+    let rkt=0,rtm=0;
+    if(src){ const t=n(src.kt)+n(src.tm); if(t>0){ rkt=lay*n(src.kt)/t; rtm=lay*n(src.tm)/t; } }
+    else if((r.nguon||'')==='Thu mua') rtm=lay; else rkt=lay;
     kt+=rkt; tm+=rtm;
   });
   let ton=0; rows.forEach(r=>ton+=n(r.ton));
   setM('c1_m_ton',fmt(ton));
   setM('c1_m_vao',fmt(vao));
-  setM('c1_m_kt',fmt(kt));
-  setM('c1_m_tm',fmt(tm));
-  setM('c1_m_cocau', vao? 'KT '+fmt(kt/vao*100)+'% · TM '+fmt(tm/vao*100)+'%' : '—');
+  setRO('c2_tl_kt', vao? fmt(kt/vao*100)+' %' : ''); setRO('c2_tl_tm', vao? fmt(tm/vao*100)+' %' : '');
   state['2_1']=Object.assign({},state['2_1'],{_vao:vao,_kt:kt,_tm:tm,_maC:maC});
   save();
 }
 
 function calcC3(){
   setRO('c3_ma_c',(state['2_1']||{})._maC||'');
-  const xt=n(document.getElementById('c2_x_tuoi')?.value), xd=n(document.getElementById('c2_x_drc')?.value);
-  const nt=n(document.getElementById('c2_n_tuoi')?.value), nd=n(document.getElementById('c2_n_drc')?.value);
-  const xk=xt*xd/100, nk=nt*nd/100;
-  const e1=document.getElementById('c2_x_kho'); if(e1) e1.value= xk?fmt(xk):'';
-  const e2=document.getElementById('c2_n_kho'); if(e2) e2.value= nk?fmt(nk):'';
+  const xk=n(document.getElementById('c2_x_kho')?.value), nk=n(document.getElementById('c2_n_kho')?.value);
   const hao=xk-nk, pct= xk? hao/xk*100 : 0;
   setRO('c2_hao', (xk||nk)? fmt(hao) : '');
   setRO('c2_pct', xk? fmt(pct)+' %' : '');
@@ -1106,7 +1195,7 @@ function calcC4(){
     if(eTm && st._tm!==undefined && st._tm!=='') eTm.value=Math.round(n(st._tm)*100)/100;
     vKt=n(eKt?.value); vTm=n(eTm?.value); vao=vKt+vTm;
     if(eV) eV.value=fmt(vao);
-    setRO('c3_ty_le', vao? 'KT '+fmt(vKt/vao*100)+'% · TM '+fmt(vTm/vao*100)+'%' : '');
+    setRO('c3_tl_kt', vao? fmt(vKt/vao*100)+' %' : ''); setRO('c3_tl_tm', vao? fmt(vTm/vao*100)+' %' : '');
     tp=n(document.getElementById('c3_tp')?.value);
     kt = vao? tp*vKt/vao : 0;
     tm = vao? tp*vTm/vao : 0;
@@ -1149,8 +1238,8 @@ function calcC6(){
     setRO('c5_lech_tm',(lTm>=0?'+':'')+fmt(lTm)+' kg'); huong('c5_huong_tm',lTm);
   } else {
     const eV=document.getElementById('c5_vao'), eT=document.getElementById('c5_tp');
-    if(eV && !eV.value && s3._vao) eV.value=s3._vao;
-    if(eT && !eT.value && s3._tp) eT.value=s3._tp;
+    if(eV && s3._vao) eV.value=fmt(n(s3._vao));
+    if(eT && s3._tp) eT.value=fmt(n(s3._tp));
     const vao=n(eV?.value), tp=n(eT?.value), lech=tp-vao;
     setRO('c5_lech',(lech>=0?'+':'')+fmt(lech)+' kg');
     if(vao||tp) huong('c5_huong',lech);
@@ -1206,7 +1295,7 @@ function calcD2(){
   rows.forEach(r=>{ const v=n(r.kl); kl+=v; banh+=n(r.banh); if(r.nguon==='Thu mua') ltm+=v; else lkt+=v; });
   setRO('d2_so_lo',rows.length);
   setM('d1_m_lo',rows.length); setM('d1_m_banh',fmt(banh)); setM('d1_m_kl',fmt(kl));
-  setM('d1_m_cocau', kl? 'KT '+fmt(lkt/kl*100)+'% · TM '+fmt(ltm/kl*100)+'%' : '—');
+  setRO('d2_tl_kt', kl? fmt(lkt/kl*100)+' %' : ''); setRO('d2_tl_tm', kl? fmt(ltm/kl*100)+' %' : '');
   state['3_1']=Object.assign({},state['3_1'],{_lo:rows.length,_kl:kl});
   save();
 }
@@ -1226,12 +1315,12 @@ function calcX3(){
   const rows=readTable('x3_ton');
   let chon=0,kt=0,tm=0,ton=0;
   rows.forEach(r=>{ ton+=n(r.ton);
-    if(r.chon===true||r.chon==='true'){ const k=n(r.kl)||n(r.ton); chon+=k; if(r.nguon==='Thu mua') tm+=k; else kt+=k; } });
+    const k=n(r.kl); if(k>0){ chon+=k; if(r.nguon==='Thu mua') tm+=k; else kt+=k; } });
   setM('x3_m_can',can?fmt(can):'—');
   setM('x3_m_ton',fmt(ton));
   setM('x3_m_chon',fmt(chon));
   setM('x3_m_thieu', can? (can-chon>0? '−'+fmt(can-chon) : '+'+fmt(chon-can)) : '—');
-  setM('x3_m_nguon', chon? 'TM '+fmt(tm/chon*100)+'% · KT '+fmt(kt/chon*100)+'%' : '—');
+  setRO('x3_tl_kt', chon? fmt(kt/chon*100)+' %' : ''); setRO('x3_tl_tm', chon? fmt(tm/chon*100)+' %' : '');
   state['4_2']=Object.assign({},state['4_2'],{_chon:chon,_kt:kt,_tm:tm}); save();
 }
 
@@ -1240,34 +1329,13 @@ function calcX4(){
   setRO('x4_ma_phieu',s2._maPhieu||'');
   setRO('x4_kl',fmt(n(s3._chon)));
   const kt=n(s3._kt), tm=n(s3._tm), tot=kt+tm;
-  setRO('x4_nguon', tot? 'Thu mua '+fmt(tm)+' kg · Khai thác '+fmt(kt)+' kg' : '');
+
   const rows=readTable('x4_lo');
   let kl=0,a=0,b=0; rows.forEach(r=>{ const v=n(r.kl)||0; kl+=v; if(r.nguon==='Thu mua') b+=v; else a+=v; });
   setM('x4_m_kl',fmt(kl));
-  setM('x4_m_nguon', kl? 'TM '+fmt(b/kl*100)+'% · KT '+fmt(a/kl*100)+'%' : '—');
+  setRO('x4_tl_kt', kl? fmt(a/kl*100)+' %' : ''); setRO('x4_tl_tm', kl? fmt(b/kl*100)+' %' : '');
 }
 
-function autoFIFO(){
-  const s2=state['4_1']||{}, s1=state['4_0']||{};
-  const can=n(s2.x2_kl)||n(s1.x1_kl);
-  if(!can){ alert('Chưa có khối lượng cần xuất — điền ở bước X-2.'); return; }
-  const uu=String(s2.x2_uu_tien||'');
-  const pri = uu.indexOf('Thu mua trước')===0?'Thu mua':(uu.indexOf('Khai thác trước')===0?'Khai thác':null);
-  const rows=readTable('x3_ton').map((r,i)=>({r:r,i:i}));
-  rows.sort((a,b)=>{
-    if(pri){ const pa=(a.r.nguon===pri?0:1), pb=(b.r.nguon===pri?0:1); if(pa!==pb) return pa-pb; }
-    return String(a.r.ngay||'').localeCompare(String(b.r.ngay||''));
-  });
-  let con=can;
-  rows.forEach(o=>{
-    const ton=n(o.r.ton);
-    const lay = con>0 ? Math.min(ton,con) : 0;
-    const ck=cellEl('x3_ton',o.i,'chon'); if(ck) ck.checked = lay>0;
-    const kl=cellEl('x3_ton',o.i,'kl'); if(kl) kl.value = lay>0? Math.round(lay*100)/100 : '';
-    con-=lay;
-  });
-  recalc();
-}
 
 /* ============================================================
    TRANG TỔNG QUAN
@@ -1317,7 +1385,7 @@ function goOverview(){
     +'3. Một Mã C phải chạy hết chuỗi (cân bằng → nhập kho → xuất kho) mới hoàn thành — không để treo chờ xử lý sai lệch.<br/>'
     +'4. Cơ cấu <b>khai thác / thu mua</b> theo dõi xuyên suốt từ Mã B đến Mã XK.</div>'
     +'<div class="callout co-warn" style="cursor:pointer" onclick="goCompare()"><span class="co-t">⚖ Hai phương án xử lý 2 nguồn mủ — bấm để so sánh</span>'
-    +'Đang xem theo <b>'+esc(MODE_NAME[MODE])+'</b>. Toàn bộ form bên dưới đổi theo lựa chọn này ở các bước <b>B-1, B-2, C-1, C-3, C-5, D-1, X-2</b> — những chỗ có gắn nhãn <span class="dif-tag">KHÁC GIỮA 2 PHƯƠNG ÁN</span>.</div>'
+    +'Đang xem theo <b>'+esc(MODE_NAME[MODE])+'</b>. Toàn bộ form bên dưới đổi theo lựa chọn này ở các bước <b>B-1, B-2, C-1, C-3, C-5, D-1, X-2</b> — những chỗ có gắn nhãn <span class="dif-tag">KHÁC GIỮA CÁC PHƯƠNG ÁN</span>.</div>'
     +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200);margin-top:18px">Quy tắc sinh mã — PEFC-TNSR-04 (hiệu lực 01/05/2025)</div>'
     +'<div class="tw"><table><thead><tr><th style="width:130px">Mã</th><th style="width:210px">Cấu trúc</th><th style="width:150px">Ví dụ</th><th>Sinh từ trường nào trên phiếu</th></tr></thead><tbody>'
     +[['Plot_ID','Định danh lô đất','PLOT001 · PLOT_A02','Hệ thống Dữ liệu Lô Đất — tra theo To_So'],
