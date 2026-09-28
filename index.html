@@ -298,7 +298,7 @@ const FLOWS = [
         {id:'a3_tt',label:'Trạng thái mapping',type:'sel',opts:['Đã mapping trên App DRC','Chờ mạng — nhập bù sau']}
       ]}
     ]},
-  { code:'A-4', title:'Tạo Mã A', desc:'Ghi nhận nguyên liệu vào kho — điểm bắt đầu chuỗi truy xuất',
+  { code:'A-4', title:'Tạo Mã A', desc:'Hoàn tất dữ liệu Mã A — chờ lập phiếu nhập kho nguyên liệu tại QT2',
     nguoi:'Hệ thống · Nhân sự trạm cân', sla:'Ngay sau mapping', duyet:'—',
     body:[
       {title:'Dữ liệu Mã A', fields:[
@@ -331,14 +331,14 @@ const FLOWS = [
         {id:'nk1_loai_mu',label:'Loại mủ',type:'sel',opts:LOAI_MU,req:1,dflt:'Mủ tạp'},
         {id:'nk1_ngay',label:'Ngày nhập kho dự kiến',type:'date',req:1,dflt:'2025-05-12'}
       ]},
-      {co:'auto',t:'Hệ thống lọc',x:'Chỉ trả về Mã A <b>đã có KL quy khô</b> và <b>chưa nằm trong phiếu nhập kho nào</b>.'}
+      {co:'auto',t:'Hệ thống lọc',x:'Chỉ trả về Mã A <b>đã có KL quy khô</b> và <b>chưa thuộc phiếu nhập kho đang hiệu lực</b>. Mã A trong phiếu bị <b>huỷ hoặc trả lại</b> được giải phóng, lọc lại được ngay.'}
     ]},
   { code:'NK-2', title:'Kiểm tra danh sách nguyên liệu', desc:'Hệ thống trả danh sách — bỏ bớt hoặc bổ sung Mã A',
     nguoi:'Nhân viên kho nguyên liệu', sla:'Ngay sau khi lọc', duyet:'—',
     body:[
       {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Bấm × để bỏ Mã A chưa muốn nhập kho, hoặc chọn thêm Mã A đủ điều kiện từ danh sách.'},
       {title:'Danh sách Mã A đề nghị nhập kho', table:{id:'nk2_list', add:'+ Thêm Mã A — chọn từ danh sách',
-        cols:[{k:'ma_a',l:'Mã A (mã phiếu cân)',w:'165px',pick:'maA'},{k:'ngay',l:'Ngày cân',type:'date',w:'125px',ro:1},
+        cols:[{k:'ma_a',l:'Mã A',w:'165px',pick:'maA'},{k:'ngay',l:'Ngày cân',type:'date',w:'125px',ro:1},
               {k:'to',l:'Tổ / NCC',w:'110px',ro:1},
               {k:'nguon',l:'Nguồn',type:'sel',opts:NGUON,w:'190px',ro:1},
               {k:'loai_mu',l:'Loại mủ',type:'sel',opts:LOAI_MU,w:'110px',ro:1},
@@ -362,7 +362,7 @@ const FLOWS = [
         {id:'nk3_so_ma',label:'Số Mã A cấu thành',type:'ro'},
         {id:'nk3_kl',label:'Tổng KL nhập kho (kg quy khô)',type:'ro'},
         {id:'nk3_nguoi',label:'Người lập phiếu',type:'text',dflt:'Nguyễn Văn A — NV kho nguyên liệu'},
-        {id:'nk3_tt',label:'Trạng thái phiếu',type:'sel',opts:['Nháp','Chờ duyệt','Đã duyệt','Trả lại']}
+        {id:'nk3_tt',label:'Trạng thái phiếu',type:'ro',hint:'Tự cập nhật theo kết quả duyệt ở NK-4'}
       ]},
       {title:'Chứng từ', fields:[
         {id:'nk3_ct',label:'Chứng từ nhập kho nguyên liệu',type:'file',req:1,full:1,hint:'Theo biểu mẫu đang dùng trên Base'}
@@ -418,7 +418,7 @@ const FLOWS = [
       ]},
       {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Bấm × để bỏ Mã A không muốn gom. Thêm lại thì chọn Mã A trong danh sách, các cột khác tự đổ theo.'},
       {title:'Danh sách Mã Giao Nhận (Mã A) hệ thống trả về', table:{id:'b2_list', add:'+ Thêm Mã A — chọn từ danh sách',
-        cols:[{k:'ma_a',l:'Mã A (mã phiếu cân)',w:'165px',pick:'maA'},{k:'ngay',l:'Ngày nhận',type:'date',w:'125px',ro:1},
+        cols:[{k:'ma_a',l:'Mã A',w:'165px',pick:'maA'},{k:'ngay',l:'Ngày nhận',type:'date',w:'125px',ro:1},
               {k:'to',l:'Nguồn (Đơn vị/Tổ)',w:'110px',ro:1},
               {k:'nguon',l:'Phân loại',type:'sel',opts:NGUON,w:'190px',ro:1},
               {k:'loai_mu',l:'Loại mủ',type:'sel',opts:LOAI_MU,w:'110px',ro:1},
@@ -463,9 +463,9 @@ const FLOWS = [
         {id:'c1_den',label:'Ngày phân lô Mã B — đến',type:'date',dflt:'2025-05-14'},
         {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,req:1,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Chọn nhiều ô — mẻ trộn được mủ của cả hai nguồn'},
         ]},
-      {co:'info',t:'Mẻ trộn 2 nguồn',x:'Gom được Mã B khai thác lẫn thu mua. Nguyên liệu vào ghi riêng từng nguồn theo Mã B, thành phẩm ra cũng ghi riêng ở C-4.'},
+      {co:'info',t:'Một đợt chế biến có thể gồm hai nguồn',x:'Nguyên liệu và thành phẩm được <b>quản lý tách riêng theo nguồn</b>: vào ghi riêng theo Mã B, ra ghi riêng ở C-4.'},
       
-      {co:'auto',t:'Sau khi gửi xử lý',x:'Hệ thống sinh <b>Mã C = CB[YYMMDD]</b> và trả danh sách Mã B chưa chế biến khớp tiêu chí sang bước C-2.'}
+      {co:'auto',t:'Sau khi gửi xử lý',x:'Hệ thống sinh <b>Mã C = CB[YYMMDD]</b> và trả danh sách Mã B còn khối lượng khả dụng khớp tiêu chí sang bước C-2.'}
     ]},
   { code:'C-2', title:'Chọn Mã B đưa vào chế biến', desc:'Hệ thống trả danh sách — người dùng thêm bớt và điền KL',
     nguoi:'Giám sát chế biến', sla:'Ngay sau khi lọc', duyet:'—',
@@ -476,7 +476,7 @@ const FLOWS = [
         {id:'c2_loai_mu',label:'Loại mủ',type:'ro',inh:['3_0','c1_loai_mu'],inhLbl:'C-1'},
         {id:'c2_ngay',label:'Ngày chế biến',type:'ro',inh:['3_0','c1_ngay'],inhLbl:'C-1'}
       ]},
-      {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Danh sách Mã B chưa chế biến khớp tiêu chí ở C-1. Bấm × để bỏ, hoặc chọn thêm Mã B từ danh sách.'},
+      {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Danh sách Mã B còn khối lượng khả dụng khớp tiêu chí ở C-1. Bấm × để bỏ, hoặc chọn thêm Mã B từ danh sách.'},
       
       {title:'Danh sách Mã B hệ thống trả về', table:{id:'c1_ma_b', add:'+ Thêm Mã B — chọn từ danh sách',
         cols:[{k:'ma_b',l:'Mã Lô Lưu trữ (Mã B)',w:'165px',pick:'maB'},{k:'khu',l:'Ô lưu trữ',type:'sel',opts:KHU_LUU,w:'220px',ro:1},
@@ -496,7 +496,10 @@ const FLOWS = [
         {id:'c2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
       ]},
       {co:'info',t:'Chỉ định CB',x:'<b>CB</b> = 100% tồn · <b>CBxxx</b> = xxx kg · <b>CBxx%</b> = xx% tồn. Cột KL tự điền theo.'},
-      {co:'warn',t:'Hai dây chuyền',x:'Khối lượng chia cho <b>dây chuyền 3 tấn</b> và <b>dây chuyền 6 tấn</b>; tổng hai cột phải bằng KL đem chế biến của dòng đó.'}
+      {co:'warn',t:'Hai dây chuyền',x:'Điền một cột, cột còn lại tự tính. Tổng hai cột phải bằng KL đem chế biến của dòng đó.'},
+      {title:'Kiểm tra phân bổ dây chuyền', fields:[
+        {id:'c2_dc_check',label:'Kết quả kiểm tra',type:'ro',full:1}
+      ]}
     ]},
   { code:'C-3', title:'Vận chuyển bãi ủ → kho nhà máy', desc:'Toàn bộ tính theo khối lượng quy khô',
     nguoi:'App DRC (Nghĩa) + kho nhà máy', sla:'Trong ngày vận chuyển', duyet:'—',
@@ -603,7 +606,7 @@ const FLOWS = [
   { code:'C-7', title:'Duyệt cân bằng khối lượng', desc:'Duyệt xong mới được nhập kho thành phẩm',
     nguoi:'Người phụ trách cân bằng trình ký', sla:'1–2 ngày', duyet:'Trưởng phòng kế hoạch → các cấp',
     body:[
-      {co:'auto',t:'Sau khi duyệt',x:'Hệ thống sinh <b>Mã B điều chỉnh</b> và phiếu <b>nhập kho điều chỉnh</b>, gắn vào Mã C; đồng thời bắn phiếu nhập kho thành phẩm sang QT4. Chế biến đợt nào nghiệm thu nhập kho đợt đó.'},
+      {co:'auto',t:'Sau khi duyệt',x:'Hệ thống sinh <b>Mã B điều chỉnh</b> và phiếu <b>nhập kho điều chỉnh</b>, gắn vào Mã C; đồng thời bắn phiếu nhập kho thành phẩm sang QT5. Chế biến đợt nào nghiệm thu nhập kho đợt đó.'},
       {title:'Phê duyệt', fields:[
         {id:'c6_cap1',label:'Người duyệt',type:'text',req:1,dflt:'Nguyễn Quốc Bảo — TP Kế hoạch',hint:'Sau này bổ sung thêm các cấp ký lần lượt'},
         {id:'c6_ngay1',label:'Ngày duyệt',type:'date',dflt:'2025-05-17'},
@@ -622,7 +625,7 @@ const FLOWS = [
     body:[
       {title:'Thông tin nhập kho (BM03A — Mẫu 08A-PEFC04)', fields:[
         {id:'d1_ma_nk',label:'Mã phiếu nhập kho TP',type:'ro',hint:'F03N-[STT] — hệ thống sinh'},
-        {id:'d1_ma_c',label:'Mã Lô chế biến nguồn (Mã C)',type:'ro',calc:1,inh:['3_1','c2_ma_c'],inhLbl:'C-2',hint:'Tự lấy từ phiếu QT3 nối sang'},
+        {id:'d1_ma_c',label:'Mã Lô chế biến nguồn (Mã C)',type:'ro',calc:1,inh:['3_1','c2_ma_c'],inhLbl:'C-2',hint:'Tự lấy từ phiếu QT4 nối sang'},
         {id:'d1_ma_sp',label:'Mã sản phẩm',type:'ro',inh:['3_3','c3_sp_tt'],inhLbl:'C-4'},
         {id:'d1_ngay',label:'Ngày nhập kho',type:'date',req:1,dflt:'2025-05-17'},
         {id:'d1_kl_kt',label:'KL nhập — khai thác (kg)',type:'ro',src:'inh',calc:1},
@@ -772,7 +775,7 @@ const FLOWS = [
    ============================================================ */
 function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
 // Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
-const STORE_VER='v53';
+const STORE_VER='v54';
 try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
 
 
@@ -1102,6 +1105,8 @@ function calcNK2(){
 
 function calcNK3(){
   const s1=state['1_1']||{};
+  const kq=(state['1_3']||{}).nk4_kq||'';
+  setRO('nk3_tt', kq.indexOf('Duyệt')>0? 'Đã duyệt' : (kq.indexOf('Trả lại')>0? 'Trả lại' : 'Chờ duyệt'));
   setRO('nk3_ma_phieu','NKNL-'+pad((state['1_2']||{})._stt||1,3));
   setRO('nk3_so_ma', s1._so||'');
   setRO('nk3_kl', s1._kho? fmt(n(s1._kho)) : '');
@@ -1153,7 +1158,19 @@ function calcC2(){
     kt+=rkt; tm+=rtm;
   });
   let ton=0; rows.forEach(r=>ton+=n(r.ton));
-  let dc3=0,dc6=0; rows.forEach(r=>{ dc3+=n(r.dc3); dc6+=n(r.dc6); });
+  let dc3=0,dc6=0; const loi=[];
+  rows.forEach(function(r,i){
+    const l=n(r.lay), a3=n(r.dc3), a6=n(r.dc6);
+    const c3=cellEl('c1_ma_b',i,'dc3'), c6=cellEl('c1_ma_b',i,'dc6');
+    // điền một cột, cột còn lại tự tính
+    if(l>0 && a3>0 && !String(r.dc6||'').trim() && a3<=l && c6) c6.value=Math.round((l-a3)*100)/100;
+    else if(l>0 && a6>0 && !String(r.dc3||'').trim() && a6<=l && c3) c3.value=Math.round((l-a6)*100)/100;
+    const v3=n(c3?c3.value:a3), v6=n(c6?c6.value:a6);
+    if(l>0 && (v3||v6) && Math.abs(v3+v6-l)>0.01)
+      loi.push((r.ma_b||'dòng '+(i+1))+': '+fmt(v3)+' + '+fmt(v6)+' = '+fmt(v3+v6)+' ≠ '+fmt(l)+' kg');
+    dc3+=v3; dc6+=v6;
+  });
+  setRO('c2_dc_check', loi.length? '⚠ '+loi.join(' · ') : (dc3+dc6? '✓ Phân bổ khớp KL đem chế biến' : ''));
   setM('c1_m_dc3',fmt(dc3)); setM('c1_m_dc6',fmt(dc6));
   setM('c1_m_ton',fmt(ton));
   setM('c1_m_vao',fmt(vao));
@@ -1368,7 +1385,7 @@ function goOverview(){
     +'<div class="tw"><table><thead><tr><th style="width:130px">Mã</th><th style="width:210px">Cấu trúc</th><th style="width:150px">Ví dụ</th><th>Sinh từ trường nào trên phiếu</th></tr></thead><tbody>'
     +[['Plot_ID','Định danh lô đất','PLOT001 · PLOT_A02','Hệ thống Dữ liệu Lô Đất — tra theo To_So'],
       ['Mã A (Ma_GiaoNhan_GN)','[YYYYMMDD][XX]','2025050101','Ngày cân + STT phiếu cân trong ngày'],
-      ['Mã B (Lô lưu trữ)','[B-][YY][XXXX]','B-250001','Năm lưu trữ + STT lô nhập kho (max+1)'],
+      ['Mã B (Lô lưu trữ)','[B-][YY][XXXX]-KT/TM','B-250001-KT','Năm lưu trữ + STT (max+1) + hậu tố nguồn'],
       ['Mã C (Lô chế biến)','CB[YYMMDD]','CB250501','Ngày chế biến'],
       ['Chỉ định chế biến','CB · CBxxx · CBxx%','CB10000','100% tồn · xxx kg · xx% tồn của Mã B'],
       ['Mã D (Lô thành phẩm)','[TP-][Mã C]','TP-CB250501','Kế thừa Mã C, chia lô .01 .02…'],
