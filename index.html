@@ -484,22 +484,18 @@ const FLOWS = [
               {k:'ton',l:'Tồn quy khô (kg)',type:'num',w:'120px',ro:1},
               {k:'cb',l:'Chỉ định CB',w:'110px',calc:1},
               {k:'lay',l:'KL đem chế biến (kg)',type:'num',w:'130px',calc:1},
-              {k:'dc3',l:'Vào dây chuyền 3 tấn (kg)',type:'num',w:'140px',calc:1},
-              {k:'dc6',l:'Vào dây chuyền 6 tấn (kg)',type:'num',w:'140px',calc:1}],
-        def:[{ma_b:'B-250001-KT',khu:KHU_LUU[1],nguon:'Khai thác',ton:'31500',cb:'CB',lay:'31500',dc3:'10500',dc6:'21000'},
-             {ma_b:'B-250002-TM',khu:KHU_LUU[0],nguon:'Thu mua',ton:'18000',cb:'CB10000',lay:'10000',dc3:'4000',dc6:'6000'}],
+              ],
+        def:[{ma_b:'B-250001-KT',khu:KHU_LUU[1],nguon:'Khai thác',ton:'31500',cb:'CB',lay:'31500'},
+             {ma_b:'B-250002-TM',khu:KHU_LUU[0],nguon:'Thu mua',ton:'18000',cb:'CB10000',lay:'10000'}],
         foot:[{k:'ma_b',lbl:'Σ TỔNG CỘNG'},
               {k:'ton',id:'c1_m_ton',c:'amber'},{k:'lay',id:'c1_m_vao',c:'teal'},
-              {k:'dc3',id:'c1_m_dc3',c:'blue'},{k:'dc6',id:'c1_m_dc6',c:'green'}]}},
+              ]}},
       {title:'Cơ cấu nguyên liệu đưa vào chế biến', fields:[
         {id:'c2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
         {id:'c2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
       ]},
       {co:'info',t:'Chỉ định CB',x:'<b>CB</b> = 100% tồn · <b>CBxxx</b> = xxx kg · <b>CBxx%</b> = xx% tồn. Cột KL tự điền theo.'},
-      {co:'warn',t:'Hai dây chuyền',x:'Điền một cột, cột còn lại tự tính. Tổng hai cột phải bằng KL đem chế biến của dòng đó.'},
-      {title:'Kiểm tra phân bổ dây chuyền', fields:[
-        {id:'c2_dc_check',label:'Kết quả kiểm tra',type:'ro',full:1}
-      ]}
+
     ]},
   { code:'C-3', title:'Vận chuyển bãi ủ → kho nhà máy', desc:'Toàn bộ tính theo khối lượng quy khô',
     nguoi:'App DRC (Nghĩa) + kho nhà máy', sla:'Trong ngày vận chuyển', duyet:'—',
@@ -645,17 +641,24 @@ const FLOWS = [
         {id:'d2_kl',label:'Tổng KL nhập (kg)',type:'ro',inh:['4_0','d1_kl'],inhLbl:'D-1'},
         {id:'d2_so_lo',label:'Số lô hệ thống tạo',type:'ro'}
       ]},
-      {co:'auto',t:'Chia lô tự động',x:'1 bành 35 kg · 1 pallet 36 bành · 1 lô 4 pallet = 144 bành = 5.040 kg. Lô cuối thiếu vẫn giữ số lô riêng. Mã lô: <b>[Mã D]-1, -2, -3…</b>'},
-      {btn:{id:'btn-lo',label:'⚙ Chia lô lại theo khối lượng nhập kho',fn:'genLo(true)'}},
-      {title:'Danh sách mã lô thành phẩm', table:{id:'d1_lo', add:'+ Thêm lô thủ công',
-        cols:[{k:'lo',l:'Mã lô thành phẩm',w:'175px'},{k:'pallet',l:'Pallet',w:'130px'},
-              {k:'banh',l:'Số bành',type:'num',w:'90px'},{k:'kl',l:'Số lượng (kg)',type:'num',w:'120px',calc:1},
-              {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'120px'},
-              {k:'tp',l:'Mã sản phẩm',type:'sel',opts:LOAI_TP,w:'150px',ro:1}],
-        def:[],
-        foot:[{k:'lo',lbl:'Σ TỔNG NHẬP'},{k:'pallet',id:'d1_m_lo',pre:'Số lô:',c:'amber'},
-              {k:'banh',id:'d1_m_banh',c:'blue'},
-              {k:'kl',id:'d1_m_kl',c:'teal'}]}},
+      {co:'auto',t:'Quy tắc nhập mã lô',x:'Mã lô kiểu <b>26J309</b> = năm 26 · chuyền 3 tấn · tháng 9. Điền <b>từ–đến</b> thì khối lượng tự tính = số lô × 5.040 kg (1 lô = 4 pallet = 144 bành × 35 kg).'},
+      {co:'warn',t:'Lô lẻ',x:'Lô cuối không đủ: điền <b>từ</b>, <b>bỏ trống đến</b> để hệ thống không tự tính, rồi điền khối lượng thực tế vào cột <b>Lô lẻ</b>.'},
+      {title:'Danh sách mã lô thành phẩm', table:{id:'d1_lo', add:'+ Thêm dòng mã lô',
+        cols:[{k:'lo',l:'Mã lô',w:'150px',calc:1},
+              {k:'tu',l:'Từ',type:'num',w:'90px',calc:1},
+              {k:'den',l:'Đến',type:'num',w:'90px',calc:1},
+              {k:'kl',l:'Khối lượng (kg)',type:'num',w:'140px',ro:1},
+              {k:'le',l:'Lô lẻ (kg)',type:'num',w:'130px',calc:1},
+              {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'120px'}],
+        def:[{lo:'26J309',tu:'1',den:'8',le:'',nguon:'Khai thác'},
+             {lo:'26J309',tu:'9',den:'',le:'6480',nguon:'Thu mua'}],
+        foot:[{k:'lo',lbl:'Σ TỔNG'},{k:'den',id:'d1_m_lo',pre:'Số lô:',c:'amber'},
+              {k:'kl',id:'d1_m_kl',c:'teal'},{k:'le',id:'d1_m_le',c:'blue'}]}},
+      {title:'Đối chiếu khối lượng', fields:[
+        {id:'d2_tong_lo',label:'Tổng khối lượng + lô lẻ (kg)',type:'ro'},
+        {id:'d2_kl_nhap',label:'Tổng KL thành phẩm thực tế (kg)',type:'ro',src:'inh'},
+        {id:'d2_check',label:'Kết quả đối chiếu',type:'ro',full:1}
+      ]},
       {title:'Cơ cấu nguồn của lô nhập kho', fields:[
         {id:'d2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
         {id:'d2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
@@ -775,7 +778,7 @@ const FLOWS = [
    ============================================================ */
 function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
 // Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
-const STORE_VER='v54';
+const STORE_VER='v55-lo';
 try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
 
 
@@ -1158,20 +1161,6 @@ function calcC2(){
     kt+=rkt; tm+=rtm;
   });
   let ton=0; rows.forEach(r=>ton+=n(r.ton));
-  let dc3=0,dc6=0; const loi=[];
-  rows.forEach(function(r,i){
-    const l=n(r.lay), a3=n(r.dc3), a6=n(r.dc6);
-    const c3=cellEl('c1_ma_b',i,'dc3'), c6=cellEl('c1_ma_b',i,'dc6');
-    // điền một cột, cột còn lại tự tính
-    if(l>0 && a3>0 && !String(r.dc6||'').trim() && a3<=l && c6) c6.value=Math.round((l-a3)*100)/100;
-    else if(l>0 && a6>0 && !String(r.dc3||'').trim() && a6<=l && c3) c3.value=Math.round((l-a6)*100)/100;
-    const v3=n(c3?c3.value:a3), v6=n(c6?c6.value:a6);
-    if(l>0 && (v3||v6) && Math.abs(v3+v6-l)>0.01)
-      loi.push((r.ma_b||'dòng '+(i+1))+': '+fmt(v3)+' + '+fmt(v6)+' = '+fmt(v3+v6)+' ≠ '+fmt(l)+' kg');
-    dc3+=v3; dc6+=v6;
-  });
-  setRO('c2_dc_check', loi.length? '⚠ '+loi.join(' · ') : (dc3+dc6? '✓ Phân bổ khớp KL đem chế biến' : ''));
-  setM('c1_m_dc3',fmt(dc3)); setM('c1_m_dc6',fmt(dc6));
   setM('c1_m_ton',fmt(ton));
   setM('c1_m_vao',fmt(vao));
   setRO('c2_tl_kt', vao? fmt(kt/vao*100)+' %' : ''); setRO('c2_tl_tm', vao? fmt(tm/vao*100)+' %' : '');
@@ -1231,32 +1220,6 @@ function calcC6(){
   setRO('c5_vao_sau', (vKt+vTm)? fmt(vKt+vTm+dc) : '');
 }
 
-// Chia lô thành phẩm: 35kg/bành · 36 bành/pallet · 4 pallet (A-D)/lô
-function genLo(force){
-  const tb=document.getElementById('tb-d1_lo'); if(!tb) return;
-  if(!force && tb.rows.length>0) return;
-  const s3=state['3_3']||{}, sd=state['4_0']||{};
-  const tp=n(sd._kl)||n(s3._tp);
-  if(tp<=0){ if(force) alert('Chưa có khối lượng nhập kho — điền ở bước D-1.'); return; }
-  const maD = sd._maD || ('TP-'+(s3._maC||'CB250501'));
-  const klKT = n(sd._kt)||n(s3._kt);
-  const sp = (state['3_3']||{}).c3_sp_tt || LOAI_TP[0];
-  const cols = FLOWS[4].steps[1].body.filter(x=>x.table)[0].table.cols;
-  const tongBanh = Math.floor(tp/KG_BANH);
-  const soLo = Math.max(1,Math.ceil(tongBanh/BANH_LO));
-  let con=tongBanh, luyKe=0, html='';
-  for(let i=1;i<=soLo;i++){
-    const b=Math.min(BANH_LO,con); con-=b;
-    const kl=b*KG_BANH;
-    let nguon = (luyKe+kl)<=klKT ? 'Khai thác' : (luyKe>=klKT ? 'Thu mua' : 'Khai thác');
-    if(klKT<=0) nguon='Thu mua';
-    luyKe+=kl;
-    html+=rowHTML({cols:cols},
-      {lo:maD+'-'+i, pallet:PALLET_KY.map(function(x){return i+x;}).slice(0,Math.ceil(b/BANH_PALLET)).join('/'),
-       banh:b, kl:kl, nguon:nguon, tp:sp});
-  }
-  tb.innerHTML=html;
-}
 
 function calcD1(){
   const s3=state['3_3']||{};
@@ -1274,14 +1237,24 @@ function calcD1(){
 
 function calcD2(){
   setRO('d2_ma_d',(state['4_0']||{})._maD||'');
-  genLo(false);
   const rows=readTable('d1_lo');
-  let kl=0,banh=0,lkt=0,ltm=0;
-  rows.forEach(r=>{ const v=n(r.kl); kl+=v; banh+=n(r.banh); if(r.nguon==='Thu mua') ltm+=v; else lkt+=v; });
-  setRO('d2_so_lo',rows.length);
-  setM('d1_m_lo',rows.length); setM('d1_m_banh',fmt(banh)); setM('d1_m_kl',fmt(kl));
-  setRO('d2_tl_kt', kl? fmt(lkt/kl*100)+' %' : ''); setRO('d2_tl_tm', kl? fmt(ltm/kl*100)+' %' : '');
-  state['4_1']=Object.assign({},state['4_1'],{_lo:rows.length,_kl:kl});
+  let kl=0, le=0, soLo=0;
+  rows.forEach(function(r,i){
+    const tu=n(r.tu), den=n(r.den);
+    const cell=cellEl('d1_lo',i,'kl');
+    let v=0;
+    if(tu>0 && den>=tu){ const sl=den-tu+1; v=sl*KG_LO; soLo+=sl; if(cell) cell.value=Math.round(v*100)/100; }
+    else { if(cell) cell.value=''; if(tu>0 && n(r.le)>0) soLo+=1; }
+    kl+=v; le+=n(r.le);
+  });
+  setM('d1_m_lo',soLo); setM('d1_m_kl',fmt(kl)); setM('d1_m_le',fmt(le));
+  const tong=kl+le, nhap=n((state['4_0']||{})._kl);
+  setRO('d2_so_lo',soLo);
+  setRO('d2_tong_lo', tong? fmt(tong) : '');
+  setRO('d2_kl_nhap', nhap? fmt(nhap) : '');
+  setRO('d2_check', (!tong||!nhap)? '' : (Math.abs(tong-nhap)<0.01? '✓ Khớp tổng KL thành phẩm thực tế'
+        : '⚠ Lệch '+fmt(tong-nhap)+' kg so với KL thành phẩm — kiểm tra lại số lô hoặc lô lẻ'));
+  state['4_1']=Object.assign({},state['4_1'],{_lo:soLo,_kl:tong});
   save();
 }
 
